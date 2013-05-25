@@ -3,6 +3,7 @@
 #define ApplicationUI_HPP_
 
 #include <QObject>
+#include <IrcSession>
 
 namespace bb { namespace cascades { class Application; }}
 
@@ -17,6 +18,11 @@ class ApplicationUI : public QObject
 public:
     ApplicationUI(bb::cascades::Application *app);
     virtual ~ApplicationUI() {}
+
+	IrcSession* session;
+
+public slots:
+	void sendMessage(QString message);
 };
 
 

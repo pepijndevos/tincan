@@ -8,8 +8,8 @@
     qmake -spec blackberry-x86-qcc CONFIG+=simulator -o x86/Makefile
     cd x86
     make
-    blackberry-nativepackager -package TinCan.bar bar-descriptor.xml -devMode -configuration Simulator
-    blackberry-deploy -installApp -device 172.16.28.128 TinCan.bar
+    blackberry-nativepackager -package TinCan.bar ../bar-descriptor.xml -devMode -configuration Simulator
+    blackberry-deploy -installApp -launchApp -device 172.16.28.128 TinCan.bar
 
 ### Device
 
@@ -19,5 +19,5 @@ Untested...
     qmake CONFIG+=device -o arm/Makefile
     cd arm
     make
-    blackberry-nativepackager -package TinCan.bar bar-descriptor.xml -devMode -configuration Device
-    blackberry-deploy -installApp -device 172.16.28.128 TinCan.bar
+    blackberry-nativepackager -package TinCan.bar ../bar-descriptor.xml -devMode -configuration Device
+    blackberry-deploy -installApp -launchApp -device 172.16.28.128 TinCan.bar

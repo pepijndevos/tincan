@@ -1,15 +1,26 @@
-// Default empty project template
 import bb.cascades 1.0
 
-// creates one page with a label
 Page {
+    signal sendMessage(string msg)
+    id: page
     Container {
         layout: DockLayout {}
-        Label {
-            text: qsTr("Hello World")
-            textStyle.base: SystemDefaults.TextStyles.BigText
-            verticalAlignment: VerticalAlignment.Center
+        ListView {
+            dataModel: _ChannelModel
+            verticalAlignment: VerticalAlignment.Top
             horizontalAlignment: HorizontalAlignment.Center
+        }
+        TextField {
+            id: msgbar
+            inputMode: TextFieldInputMode.Chat
+            verticalAlignment: VerticalAlignment.Bottom
+            horizontalAlignment: HorizontalAlignment.Center
+            input {
+                onSubmitted: {
+                   page.sendMessage(msgbar.text);
+                   msgbar.text = "";
+                }
+            }
         }
     }
 }

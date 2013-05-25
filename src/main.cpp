@@ -1,6 +1,7 @@
 // Default empty project template
 #include <bb/cascades/Application>
 
+#include <QObject>
 #include <QLocale>
 #include <QTranslator>
 #include "applicationui.hpp"
