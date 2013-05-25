@@ -30,7 +30,11 @@ Page {
                               ActionItem {
                                     title: "Add channel"
                                     imageSource: "asset:///icons/ic_add.png"
-                                }
+                              }
+                              ActionItem {
+                                    title: "Delete Network"
+                                    imageSource: "asset:///icons/ic_delete.png"
+                              }
                             }
                         ]
                     }
