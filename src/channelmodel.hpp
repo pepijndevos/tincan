@@ -15,7 +15,7 @@ public:
     ChannelModel(QObject *parent=0) : GroupDataModel(QStringList() << "network" << "channel", parent) {}
     virtual ~ChannelModel() {}
 public slots:
-	void receiveMessage(IrcMessage* message);
+    void receiveMessage(IrcMessage* message);
 };
 
 

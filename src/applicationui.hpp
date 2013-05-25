@@ -19,10 +19,10 @@ public:
     ApplicationUI(bb::cascades::Application *app);
     virtual ~ApplicationUI() {}
 
-	IrcSession* session;
+    IrcSession* session;
 
 public slots:
-	void sendMessage(QString message);
+    void sendMessage(QString message);
 };
 
 
