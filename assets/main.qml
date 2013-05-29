@@ -6,9 +6,12 @@ NavigationPane {
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {}
         settingsAction: SettingsActionItem {}
+    }
+    Page {
         actions: [
             ActionItem {
                 title: "Add network"
+                ActionBar.placement: ActionBarPlacement.OnBar
                 imageSource: "asset:///icons/ic_add.png"
                 onTriggered: {
                     networkDialog.open();
@@ -16,14 +19,13 @@ NavigationPane {
             },
             ActionItem {
                 title: "Join channel"
+                ActionBar.placement: ActionBarPlacement.OnBar
                 imageSource: "asset:///icons/ic_add.png"
                 onTriggered: {
                     channelDialog.open();
                 }
             }
-        ] // end of actions list
-    } // end of MenuDefinition
-    Page {
+        ]
         Container {
             layout: DockLayout {}
             ListView {
