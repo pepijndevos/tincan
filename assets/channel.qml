@@ -5,7 +5,21 @@ Page {
     id: channelpage
     titleBar: TitleBar {
         id: channeltitle
-        title: "#Channel"
+        scrollBehavior: TitleBarScrollBehavior.Sticky
+        kind: TitleBarKind.FreeForm
+        kindProperties: FreeFormTitleBarKindProperties { // ugly
+            Label {
+                text: "#channel"
+                textStyle {
+                    base: SystemDefaults.TextStyles.BigText
+                }
+            }
+            expandableArea {
+                content: Label {
+                    text: "welcome to this lovely channel"
+                }
+            }
+        }
     }
     actions: [
         // define the actions for first tab here
@@ -13,7 +27,9 @@ Page {
             title: qsTr("Send")
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
-                //Send message
+                //root.sendMessage(msgbar.text);
+                chan.append({"user": "tom", "message": "hello world", "type": "privmsg"});
+                msgbar.text = "";
             }
             imageSource: "asset:///icons/ic_textmessage.png"
         },
@@ -38,20 +54,52 @@ Page {
         }
     ]
     Container {
+        layout: StackLayout {
+            orientation: LayoutOrientation.TopToBottom
+        }
         ListView {
-
+            dataModel: ArrayDataModel {
+                id: chan
+            }
+            stickToEdgePolicy: ListViewStickToEdgePolicy.End
+            listItemComponents: [
+                ListItemComponent {
+                    type: "" //todo
+         
+                    Container {
+                        layout: StackLayout {
+                            orientation: LayoutOrientation.LeftToRight
+                        }
+                        Label {
+                            text: ListItemData.user
+                            textStyle {
+                                fontWeight: FontWeight.Bold
+                                // fancy color?
+                            }
+                        }
+                        Label {
+                            text: ListItemData.message
+                        }
+                    }
+                }
+            ]
         }
         Container {
             layout: StackLayout {
                 orientation: LayoutOrientation.LeftToRight
-
             }
             TextField {
-
+                id: msgbar
+                inputMode: TextFieldInputMode.Chat
+                input {
+                    onSubmitted: {
+                        root.sendMessage(msgbar.text);
+                        msgbar.text = "";
+                    }
+                }
             }
             ImageView {
                 imageSource: "asset:///icons/ic_add.png"
-
             }
 
         }
