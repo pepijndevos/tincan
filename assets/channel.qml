@@ -7,11 +7,17 @@ Page {
         id: channeltitle
         scrollBehavior: TitleBarScrollBehavior.Sticky
         kind: TitleBarKind.FreeForm
-        kindProperties: FreeFormTitleBarKindProperties { // ugly
-            Label {
-                text: "#channel"
-                textStyle {
-                    base: SystemDefaults.TextStyles.BigText
+        kindProperties: FreeFormTitleBarKindProperties {
+            Container {
+                topPadding: 20
+                leftPadding: 10
+                Label {
+                    verticalAlignment: VerticalAlignment.Center
+                    text: "#channel"
+                    textStyle {
+                        color: Color.White
+                        base: SystemDefaults.TextStyles.TitleText
+                    }
                 }
             }
             expandableArea {
