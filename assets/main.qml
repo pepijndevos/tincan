@@ -1,8 +1,10 @@
 import bb.cascades 1.0
+import Communi 1.0
 
 NavigationPane {
     id: root
-    signal sendMessage(string msg)
+    property IrcSession session: IrcSession {}
+    property IrcCommand cmd: IrcCommand {}
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {}
         settingsAction: SettingsActionItem {}
@@ -29,7 +31,8 @@ NavigationPane {
         Container {
             layout: DockLayout {}
             ListView {
-                dataModel: _ChannelModel
+                //dataModel: _ChannelModel
+                //TODO QlistDataModel based on IrcBufferModel
                 verticalAlignment: VerticalAlignment.Top
                 horizontalAlignment: HorizontalAlignment.Center
                 listItemComponents: [
@@ -90,7 +93,9 @@ NavigationPane {
                    text: "Join"
                    onClicked: {
                        channelDialog.close();
-                       root.sendMessage("JOIN #test");
+                       console.log(IrcCommand);
+                       var command = cmd.createJoin("#test");
+                       session.sendCommand(command);
                    }
                }
             }
@@ -100,7 +105,15 @@ NavigationPane {
             Container {
                 Button {
                     text: "Connect"
-                    onClicked: networkDialog.close()
+                    onClicked: {
+                      console.log(session)
+                      session.host = "irc.freenode.net";
+                      session.userName = "pepijn__";
+                      session.nickName = "pepijn__";
+                      session.realName = "Pepijn de Vos";
+                      session.open();
+                      networkDialog.close()
+                    }
                 }
             }
         }
