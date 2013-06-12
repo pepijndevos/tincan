@@ -1,5 +1,5 @@
 #include "channelmodel.hpp"
-#include <qDebug>
+#include <QDebug>
 
 void ChannelModel::receiveMessage(IrcMessage* message) {
     QVariantMap map;
