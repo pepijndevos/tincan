@@ -12,7 +12,7 @@ class ChannelModel : public GroupDataModel
 {
     Q_OBJECT
 public:
-    ChannelModel(QObject *parent=0) : GroupDataModel(QStringList() << "network" << "channel", parent) {}
+    ChannelModel(QObject *parent=0);
     virtual ~ChannelModel() {}
 public slots:
     void receiveMessage(IrcMessage* message);

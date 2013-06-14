@@ -1,5 +1,10 @@
 #include "channelmodel.hpp"
 #include <QDebug>
+#include <bb/cascades/ItemGrouping>
+
+ChannelModel::ChannelModel(QObject *parent) : GroupDataModel(QStringList() << "network" << "channel", parent) {
+    setGrouping(bb::cascades::ItemGrouping::ByFullValue);
+}
 
 void ChannelModel::receiveMessage(IrcMessage* message) {
     QVariantMap map;
@@ -12,6 +17,7 @@ void ChannelModel::receiveMessage(IrcMessage* message) {
                 insert(map);
                 break;
             case IrcMessage::Part:
+            case IrcMessage::Kick:
                 qDebug() << "parting";
                 map["channel"] = ((IrcPartMessage*)message)->channel();
                 map["network"] = message->session()->host();

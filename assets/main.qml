@@ -31,8 +31,8 @@ NavigationPane {
         Container {
             layout: DockLayout {}
             ListView {
-                //dataModel: _ChannelModel
-                //TODO QlistDataModel based on IrcBufferModel
+                id: channelList
+                dataModel: ChannelModel { id: chanmod }
                 verticalAlignment: VerticalAlignment.Top
                 horizontalAlignment: HorizontalAlignment.Center
                 listItemComponents: [
@@ -89,29 +89,45 @@ NavigationPane {
         Dialog {
             id: channelDialog
             Container {
-               Button {
-                   text: "Join"
-                   onClicked: {
-                       channelDialog.close();
-                       console.log(IrcCommand);
-                       var command = cmd.createJoin("#test");
-                       session.sendCommand(command);
-                   }
-               }
+                TextField {
+                    id: roomname
+                    text: "#"
+                    inputMode: TextFieldInputMode.Text
+                }
+                Button {
+                    text: "Join"
+                    onClicked: {
+                        channelDialog.close();
+                        console.log(IrcCommand);
+                        var command = cmd.createJoin(roomname.text);
+                        session.sendCommand(command);
+                    }
+                }
             }
         },
         Dialog {
             id: networkDialog
             Container {
+                TextField {
+                    id: server
+                    inputMode: TextFieldInputMode.Url
+                }
+                TextField {
+                    id: nick
+                    inputMode: TextFieldInputMode.Text
+                }
                 Button {
                     text: "Connect"
                     onClicked: {
                       console.log(session)
-                      session.host = "irc.freenode.net";
-                      session.userName = "pepijn__";
-                      session.nickName = "pepijn__";
-                      session.realName = "Pepijn de Vos";
+                      session.host = server.text || "irc.freenode.net";
+                      session.userName = nick.text || "guest";
+                      session.nickName = nick.text || "guest";
+                      session.realName = "TinCan User";
                       session.open();
+
+                      session.messageReceived.connect(chanmod.receiveMessage);
+
                       networkDialog.close()
                     }
                 }

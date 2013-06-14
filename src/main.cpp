@@ -5,14 +5,11 @@
 #include <QLocale>
 #include <QTranslator>
 #include "applicationui.hpp"
+#include "channelmodel.hpp"
 
-#include <Irc>
-#include <IrcBuffer>
 #include <IrcSession>
 #include <IrcCommand>
 #include <IrcMessage>
-#include <IrcUserModel>
-#include <IrcBufferModel>
 
 // include JS Debugger / CS Profiler enabler
 // this feature is enabled by default in the debug build only
@@ -22,10 +19,9 @@ using namespace bb::cascades;
 
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
-    qmlRegisterType<Irc>("Communi", 1, 0, "Irc");
-    qmlRegisterType<IrcBuffer>("Communi", 1, 0, "IrcBuffer");
     qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
     qmlRegisterType<IrcCommand>("Communi", 1, 0, "IrcCommand");
+    qmlRegisterType<ChannelModel>("Communi", 1, 0, "ChannelModel");
     qmlRegisterUncreatableType<IrcMessage>("Communi", 1, 0, "IrcMessage", "");
 
     // this is where the server is started etc
