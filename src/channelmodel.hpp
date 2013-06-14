@@ -3,8 +3,9 @@
 
 #include <QObject>
 #include <bb/cascades/GroupDataModel>
-#include <IrcMessage>
 #include <IrcSession>
+#include <IrcBufferModel>
+#include <IrcBuffer>
 
 using namespace bb::cascades;
 
@@ -14,8 +15,11 @@ class ChannelModel : public GroupDataModel
 public:
     ChannelModel(QObject *parent=0);
     virtual ~ChannelModel() {}
+
 public slots:
-    void receiveMessage(IrcMessage* message);
+    void addSession(IrcSession *session);
+    void bufferAdded(IrcBuffer* buf);
+    void bufferRemoved(IrcBuffer* buf);
 };
 
 

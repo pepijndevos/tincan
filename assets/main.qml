@@ -98,7 +98,6 @@ NavigationPane {
                     text: "Join"
                     onClicked: {
                         channelDialog.close();
-                        console.log(IrcCommand);
                         var command = cmd.createJoin(roomname.text);
                         session.sendCommand(command);
                     }
@@ -119,14 +118,13 @@ NavigationPane {
                 Button {
                     text: "Connect"
                     onClicked: {
-                      console.log(session)
                       session.host = server.text || "irc.freenode.net";
                       session.userName = nick.text || "guest";
                       session.nickName = nick.text || "guest";
                       session.realName = "TinCan User";
                       session.open();
 
-                      session.messageReceived.connect(chanmod.receiveMessage);
+                      chanmod.addSession(session);
 
                       networkDialog.close()
                     }

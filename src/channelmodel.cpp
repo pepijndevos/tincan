@@ -6,25 +6,24 @@ ChannelModel::ChannelModel(QObject *parent) : GroupDataModel(QStringList() << "n
     setGrouping(bb::cascades::ItemGrouping::ByFullValue);
 }
 
-void ChannelModel::receiveMessage(IrcMessage* message) {
+void ChannelModel::addSession(IrcSession *session) {
+    IrcBufferModel* model = new IrcBufferModel(session);
+    connect(model, SIGNAL(bufferAdded(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
+    connect(model, SIGNAL(bufferRemoved(IrcBuffer*)), this, SLOT(bufferRemoved(IrcBuffer*)));
+}
+
+void ChannelModel::bufferAdded(IrcBuffer* buf) {
     QVariantMap map;
-    if (message->sender().name() == message->session()->nickName()) {
-        switch(message->type()) {
-            case IrcMessage::Join:
-                qDebug() << "joining";
-                map["channel"] = ((IrcJoinMessage*)message)->channel();
-                map["network"] = message->session()->host();
-                insert(map);
-                break;
-            case IrcMessage::Part:
-            case IrcMessage::Kick:
-                qDebug() << "parting";
-                map["channel"] = ((IrcPartMessage*)message)->channel();
-                map["network"] = message->session()->host();
-                remove(map);
-                break;
-            default:
-                qDebug() << "other";
-        }
-    }
+    qDebug() << "joining";
+    map["channel"] = buf->title();
+    map["network"] = buf->model()->session()->host();
+    insert(map);
+}
+
+void ChannelModel::bufferRemoved(IrcBuffer* buf) {
+    QVariantMap map;
+    qDebug() << "parting";
+    map["channel"] = buf->title();
+    map["network"] = buf->model()->session()->host();
+    remove(map);
 }
