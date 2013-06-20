@@ -1,4 +1,5 @@
 import bb.cascades 1.0
+import Communi 1.0
 
 Page {
     id: userspage
@@ -21,8 +22,8 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
                 //open users
-                var newPage = users.createObject();
-                root.push(newPage);
+                /*var newPage = users.createObject();
+                root.push(newPage);*/
             }
             imageSource: "asset:///icons/user-group.png"
         },
@@ -37,7 +38,37 @@ Page {
     ]
     Container {
         ListView {
+            dataModel: UserModel {
+                id: usermod
+            }
+            verticalAlignment: VerticalAlignment.Top
+            horizontalAlignment: HorizontalAlignment.Center
+            listItemComponents: [
+                ListItemComponent {
+                    type: "header"
 
+                    Header {
+                        title: ListItemData
+                    }
+                },
+                ListItemComponent {
+                    type: "item"
+
+                    StandardListItem {
+                        title: ListItemData.username
+                    }
+                } // end of ListItemComponent
+            ] // end of listItemComponents list
+            onTriggered: {
+                var selectedItem = dataModel.data(indexPath);
+                /*var newPage = channel.createObject();
+                root.push(newPage);*/
+
+            }
+
+            onCreationCompleted: {
+                chanmod.readChannel(channel);
+            }
         }
         Container {
             layout: StackLayout {
@@ -49,16 +80,7 @@ Page {
             }
             ImageView {
                 imageSource: "asset:///icons/ic_add.png"
-
             }
-
         }
-
     }
-    attachedObjects: [
-        ComponentDefinition {
-            id: users
-            source: "users.qml"
-        }
-    ]
 }

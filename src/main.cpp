@@ -6,6 +6,7 @@
 #include <QTranslator>
 #include "applicationui.hpp"
 #include "channelmodel.hpp"
+#include "usermodel.hpp"
 
 #include <IrcSession>
 #include <IrcCommand>
@@ -20,8 +21,10 @@ using namespace bb::cascades;
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
     qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
+    qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcChannel");
     qmlRegisterType<IrcCommand>("Communi", 1, 0, "IrcCommand");
     qmlRegisterType<ChannelModel>("Communi", 1, 0, "ChannelModel");
+    qmlRegisterType<UserModel>("Communi", 1, 0, "UserModel");
     qmlRegisterUncreatableType<IrcMessage>("Communi", 1, 0, "IrcMessage", "");
 
     // this is where the server is started etc

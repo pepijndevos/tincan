@@ -1,3 +1,6 @@
 [submodule "communi"]
 	path = communi
 	url = https://github.com/communi/libcommuni.git
+[submodule "libcommuni"]
+	path = libcommuni
+	url = https://github.com/communi/libcommuni.git

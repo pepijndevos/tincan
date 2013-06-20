@@ -9,6 +9,8 @@ NavigationPane {
         helpAction: HelpActionItem {}
         settingsAction: SettingsActionItem {}
     }
+    property IrcChannel currentChannel: IrcChannel {
+    }
     Page {
         actions: [
             ActionItem {
@@ -74,6 +76,7 @@ NavigationPane {
                 ] // end of listItemComponents list
                 onTriggered: {
                     var selectedItem = dataModel.data(indexPath);
+                    //currentChannel = selectedItem //hier moet iets komen zodat bekend wordt in welk channel je zit
                     var newPage = channel.createObject();
                     root.push(newPage);
                     
@@ -91,7 +94,7 @@ NavigationPane {
             Container {
                 TextField {
                     id: roomname
-                    text: "#"
+                    text: "#test"
                     inputMode: TextFieldInputMode.Text
                 }
                 Button {
@@ -110,10 +113,12 @@ NavigationPane {
                 TextField {
                     id: server
                     inputMode: TextFieldInputMode.Url
+                    text: "irc.freenode.net"
                 }
                 TextField {
                     id: nick
                     inputMode: TextFieldInputMode.Text
+                    text: "riktincantest"
                 }
                 Button {
                     text: "Connect"
