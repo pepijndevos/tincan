@@ -67,7 +67,7 @@ Page {
             }
 
             onCreationCompleted: {
-                chanmod.readChannel(channel);
+                usermod.readChannel(currentChannel);
             }
         }
         Container {

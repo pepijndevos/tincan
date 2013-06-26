@@ -6,6 +6,7 @@
 #include <IrcSession>
 #include <IrcUserModel>
 #include <IrcUser>
+#include "bufferwrapper.hpp"
 
 using namespace bb::cascades;
 
@@ -17,7 +18,7 @@ public:
     virtual ~UserModel() {}
 
 public slots:
-    void readChannel(IrcChannel *channel);
+    void readChannel(BufferWrapper *channel);
     void userAdded(IrcUser* buf);
     void userRemoved(IrcUser* buf);
 };

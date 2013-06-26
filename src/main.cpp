@@ -7,6 +7,7 @@
 #include "applicationui.hpp"
 #include "channelmodel.hpp"
 #include "usermodel.hpp"
+#include "bufferwrapper.hpp"
 
 #include <IrcSession>
 #include <IrcCommand>
@@ -21,7 +22,8 @@ using namespace bb::cascades;
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
     qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
-    qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcChannel");
+    qmlRegisterType<IrcBuffer>("Communi", 1, 0, "IrcBuffer");
+    qmlRegisterType<BufferWrapper>("Communi", 1, 0, "BufferWrapper");
     qmlRegisterType<IrcCommand>("Communi", 1, 0, "IrcCommand");
     qmlRegisterType<ChannelModel>("Communi", 1, 0, "ChannelModel");
     qmlRegisterType<UserModel>("Communi", 1, 0, "UserModel");

@@ -5,11 +5,10 @@ NavigationPane {
     id: root
     property IrcSession session: IrcSession {}
     property IrcCommand cmd: IrcCommand {}
+    property BufferWrapper currentChannel: BufferWrapper { }
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {}
         settingsAction: SettingsActionItem {}
-    }
-    property IrcChannel currentChannel: IrcChannel {
     }
     Page {
         actions: [
@@ -63,7 +62,7 @@ NavigationPane {
                         type: "item"
                           
                         StandardListItem {
-                            title: ListItemData.channel
+                            title: ListItemData.title
                             contextActions: [
                                 ActionSet {
                                     DeleteActionItem {
@@ -76,7 +75,7 @@ NavigationPane {
                 ] // end of listItemComponents list
                 onTriggered: {
                     var selectedItem = dataModel.data(indexPath);
-                    //currentChannel = selectedItem //hier moet iets komen zodat bekend wordt in welk channel je zit
+                    currentChannel = selectedItem //hier moet iets komen zodat bekend wordt in welk channel je zit
                     var newPage = channel.createObject();
                     root.push(newPage);
                     
@@ -110,6 +109,9 @@ NavigationPane {
         Dialog {
             id: networkDialog
             Container {
+                background: SystemDefaults.Paints.containerBackground
+                horizontalAlignment: HorizontalAlignment.Fill
+                verticalAlignment: VerticalAlignment.Fill
                 TextField {
                     id: server
                     inputMode: TextFieldInputMode.Url
@@ -137,4 +139,6 @@ NavigationPane {
             }
         }
     ] // end of attachedObjects list
+    
+    onPopTransitionEnded: { page.destroy(); }
 }

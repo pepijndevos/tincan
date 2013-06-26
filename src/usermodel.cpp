@@ -7,11 +7,8 @@ UserModel::UserModel(QObject *parent) : GroupDataModel(QStringList() << "flags" 
 
 }
 
-void UserModel::readChannel(IrcChannel *channel) {
-    //IrcBufferModel* model = new IrcBufferModel(session);
-    //connect(model, SIGNAL(bufferAdded(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
-    //connect(model, SIGNAL(bufferRemoved(IrcBuffer*)), this, SLOT(bufferRemoved(IrcBuffer*)));
-	IrcUserModel* model = new IrcUserModel();
+void UserModel::readChannel(BufferWrapper *channel) {
+	IrcUserModel* model = new IrcUserModel(channel->getBuffer());
     connect(model, SIGNAL(userAdded(IrcUser*)), this, SLOT(userAdded(IrcUser*)));
     connect(model, SIGNAL(userRemoved(IrcUser*)), this, SLOT(userRemoved(IrcUser*)));
 }

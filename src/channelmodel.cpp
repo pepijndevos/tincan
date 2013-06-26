@@ -1,8 +1,9 @@
 #include "channelmodel.hpp"
+#include "bufferwrapper.hpp"
 #include <QDebug>
 #include <bb/cascades/ItemGrouping>
 
-ChannelModel::ChannelModel(QObject *parent) : GroupDataModel(QStringList() << "network" << "channel", parent) {
+ChannelModel::ChannelModel(QObject *parent) : GroupDataModel(QStringList() << "network" << "title", parent) {
     setGrouping(bb::cascades::ItemGrouping::ByFullValue);
 }
 
@@ -13,17 +14,12 @@ void ChannelModel::addSession(IrcSession *session) {
 }
 
 void ChannelModel::bufferAdded(IrcBuffer* buf) {
-    QVariantMap map;
-    qDebug() << "joining";
-    map["channel"] = buf->title();
-    map["network"] = buf->model()->session()->host();
-    insert(map);
+    BufferWrapper* bufw = new BufferWrapper(buf);
+    insert(bufw);
 }
 
 void ChannelModel::bufferRemoved(IrcBuffer* buf) {
-    QVariantMap map;
-    qDebug() << "parting";
-    map["channel"] = buf->title();
-    map["network"] = buf->model()->session()->host();
-    remove(map);
+    BufferWrapper* bufw = new BufferWrapper(buf);
+    QVariantList indexPath = find(bufw);
+    removeAt(indexPath);
 }

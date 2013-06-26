@@ -1,0 +1,41 @@
+#ifndef BufferWrapper_HPP_
+#define BufferWrapper_HPP_
+
+#include <QObject>
+#include <IrcBuffer>
+#include <IrcBufferModel>
+#include <IrcSession>
+
+#include <bb/cascades/ArrayDataModel>
+#include <bb/cascades/ListView>
+
+
+using namespace bb::cascades;
+
+class BufferWrapper : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString network READ getNetwork)
+    Q_PROPERTY(QString title READ getTitle)
+    Q_PROPERTY(IrcBuffer* buffer READ getBuffer)
+    Q_PROPERTY(ArrayDataModel* messages READ getMessages)
+        
+public:
+    BufferWrapper(IrcBuffer* parent=0);
+    virtual ~BufferWrapper() {}
+    QString getNetwork();
+    QString getTitle();
+    IrcBuffer* getBuffer();
+    ArrayDataModel* getMessages();
+
+public slots:
+    void addMessage(IrcMessage* msg);
+    void showChannel(ListView* chan);
+
+private:
+    IrcBuffer* buf;
+    ArrayDataModel* msgs;
+
+};
+
+#endif /* BufferWrapper_HPP_ */

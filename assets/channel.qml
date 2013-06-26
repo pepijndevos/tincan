@@ -12,6 +12,7 @@ Page {
                 topPadding: 20
                 leftPadding: 10
                 Label {
+                    id: chanTitle
                     verticalAlignment: VerticalAlignment.Center
                     text: "#channel"
                     textStyle {
@@ -34,7 +35,7 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
                 //root.sendMessage(msgbar.text);
-                chan.append({"user": "tom", "message": "hello world", "type": "privmsg"});
+                chan.append({"sender": "tom", "message": "hello world", "type": "privmsg"});
                 msgbar.text = "";
             }
             imageSource: "asset:///icons/ic_textmessage.png"
@@ -64,9 +65,7 @@ Page {
             orientation: LayoutOrientation.TopToBottom
         }
         ListView {
-            dataModel: ArrayDataModel {
-                id: chan
-            }
+            id: chan
             stickToEdgePolicy: ListViewStickToEdgePolicy.End
             listItemComponents: [
                 ListItemComponent {
@@ -77,7 +76,7 @@ Page {
                             orientation: LayoutOrientation.LeftToRight
                         }
                         Label {
-                            text: ListItemData.user
+                            text: ListItemData.sender
                             textStyle {
                                 fontWeight: FontWeight.Bold
                                 // fancy color?
@@ -89,6 +88,14 @@ Page {
                     }
                 }
             ]
+            onCreationCompleted: {
+                console.log("created#################");
+                console.log(currentChannel.title);
+                console.log(currentChannel.messages);
+                chanTitle.text = currentChannel.title;
+                //chan.dataModel = currentChannel.messages;
+                //currentChannel.showChannel(chan);
+            }
         }
         Container {
             layout: StackLayout {
