@@ -139,6 +139,4 @@ NavigationPane {
             }
         }
     ] // end of attachedObjects list
-    
-    onPopTransitionEnded: { page.destroy(); }
 }

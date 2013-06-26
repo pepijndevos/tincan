@@ -30,7 +30,7 @@ public:
 
 public slots:
     void addMessage(IrcMessage* msg);
-    void showChannel(ListView* chan);
+    void showChannel(QObject* chan);
 
 private:
     IrcBuffer* buf;

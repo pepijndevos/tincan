@@ -23,6 +23,8 @@ Page {
             }
             expandableArea {
                 content: Label {
+                    id: chanTopic
+                    multiline: true
                     text: "welcome to this lovely channel"
                 }
             }
@@ -88,14 +90,6 @@ Page {
                     }
                 }
             ]
-            onCreationCompleted: {
-                console.log("created#################");
-                console.log(currentChannel.title);
-                console.log(currentChannel.messages);
-                chanTitle.text = currentChannel.title;
-                //chan.dataModel = currentChannel.messages;
-                //currentChannel.showChannel(chan);
-            }
         }
         Container {
             layout: StackLayout {
@@ -117,6 +111,11 @@ Page {
 
         }
 
+    }
+    onCreationCompleted: {
+        chanTitle.text = currentChannel.buffer.title;
+        chanTopic.text = currentChannel.buffer.topic;
+        currentChannel.showChannel(chan);
     }
     attachedObjects: [
         ComponentDefinition {

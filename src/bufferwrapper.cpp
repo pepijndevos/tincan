@@ -4,12 +4,6 @@ BufferWrapper::BufferWrapper(IrcBuffer* parent) {
     buf = parent;
     msgs = new ArrayDataModel();
     
-    QVariantMap map;
-
-            map["message"] = "iets";
-            map["sender"] = "iemand";
-            msgs->append(map);
-
     connect(buf, SIGNAL(messageReceived(IrcMessage*)), this, SLOT(addMessage(IrcMessage*)));
 }
 
@@ -31,7 +25,6 @@ ArrayDataModel* BufferWrapper::getMessages() {
 
 
 void BufferWrapper::addMessage(IrcMessage* msg) {
-    qDebug() << "message***********************";
     QVariantMap map;
     switch(msg->type()) {
         case IrcMessage::Private:
@@ -44,6 +37,6 @@ void BufferWrapper::addMessage(IrcMessage* msg) {
     }
 }
 
-void BufferWrapper::showChannel(ListView* chan){
-    chan->setDataModel(msgs);
+void BufferWrapper::showChannel(QObject* chan){
+    ((ListView*)chan)->setDataModel(msgs);
 }
