@@ -21,6 +21,9 @@ public slots:
     void readChannel(BufferWrapper *channel);
     void userAdded(IrcUser* buf);
     void userRemoved(IrcUser* buf);
+
+private:
+    IrcUserModel* model;
 };
 
 

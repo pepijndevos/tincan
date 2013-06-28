@@ -37,7 +37,7 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
                 //root.sendMessage(msgbar.text);
-                chan.append({"sender": "tom", "message": "hello world", "type": "privmsg"});
+                //chan.append({"sender": "tom", "message": "hello world", "type": "privmsg"});
                 msgbar.text = "";
             }
             imageSource: "asset:///icons/ic_textmessage.png"
@@ -57,7 +57,7 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
                 //popup edit nick
-                myQmlDialog.show();
+                changeNameDialog.show();
             }
             imageSource: "asset:///icons/ic_edit_profile.png"
         }
@@ -123,7 +123,7 @@ Page {
             source: "users.qml"
         },
         SystemPrompt {
-            id: myQmlDialog
+            id: changeNameDialog
             title: "Friendly Warning"
             body: "Kakel can be habit-forming... "
             onFinished: {
