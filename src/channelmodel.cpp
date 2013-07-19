@@ -9,8 +9,8 @@ ChannelModel::ChannelModel(QObject *parent) : GroupDataModel(QStringList() << "n
 
 void ChannelModel::addSession(IrcSession *session) {
     IrcBufferModel* model = new IrcBufferModel(session);
-    connect(model, SIGNAL(bufferAdded(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
-    connect(model, SIGNAL(bufferRemoved(IrcBuffer*)), this, SLOT(bufferRemoved(IrcBuffer*)));
+    connect(model, SIGNAL(added(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
+    connect(model, SIGNAL(removed(IrcBuffer*)), this, SLOT(bufferRemoved(IrcBuffer*)));
 }
 
 void ChannelModel::bufferAdded(IrcBuffer* buf) {
