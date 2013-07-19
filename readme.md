@@ -19,5 +19,4 @@ Untested...
     qmake CONFIG+=device -o arm/Makefile
     cd arm
     make
-    blackberry-nativepackager -package TinCan.bar ../bar-descriptor.xml -devMode -configuration Device
-    blackberry-deploy -installApp -launchApp -device 172.16.28.128 TinCan.bar
+    blackberry-nativepackager -package TinCan.bar ../bar-descriptor.xml -devMode -configuration Device -installApp -launchApp -device 169.254.0.1 -password ***REMOVED*** -debugToken ../debugtoken.bar
