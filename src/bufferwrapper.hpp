@@ -30,6 +30,7 @@ public:
 
 public slots:
     void addMessage(IrcMessage* msg);
+    void addMessage(IrcCommand* msg);
     void showChannel(QObject* chan);
 
 private:

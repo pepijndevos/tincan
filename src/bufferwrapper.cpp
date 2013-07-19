@@ -37,6 +37,12 @@ void BufferWrapper::addMessage(IrcMessage* msg) {
     }
 }
 
+void BufferWrapper::addMessage(IrcCommand* cmd) {
+    IrcSession* session = buf->session();
+    QString sender = session->nickName();
+    addMessage(IrcMessage::fromCommand(sender, cmd, session));
+}
+
 void BufferWrapper::showChannel(QObject* chan){
     ((ListView*)chan)->setDataModel(msgs);
 }

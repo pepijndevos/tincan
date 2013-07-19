@@ -33,16 +33,6 @@ Page {
     actions: [
         // define the actions for first tab here
         ActionItem {
-            title: qsTr("Send")
-            ActionBar.placement: ActionBarPlacement.OnBar
-            onTriggered: {
-                //root.sendMessage(msgbar.text);
-                //chan.append({"sender": "tom", "message": "hello world", "type": "privmsg"});
-                msgbar.text = "";
-            }
-            imageSource: "asset:///icons/ic_textmessage.png"
-        },
-        ActionItem {
             title: qsTr("Users")
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
@@ -85,6 +75,7 @@ Page {
                             }
                         }
                         Label {
+                            multiline: true
                             text: ListItemData.message
                         }
                     }
@@ -100,7 +91,9 @@ Page {
                 inputMode: TextFieldInputMode.Chat
                 input {
                     onSubmitted: {
-                        root.sendMessage(msgbar.text);
+                        var command = cmd.createMessage(currentChannel.buffer.title, msgbar.text);
+                        currentChannel.buffer.sendCommand(command);
+                        currentChannel.addMessage(command);
                         msgbar.text = "";
                     }
                 }
