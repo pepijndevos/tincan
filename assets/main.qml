@@ -1,11 +1,14 @@
 import bb.cascades 1.0
+import bb.system 1.0
 import Communi 1.0
 
 NavigationPane {
     id: root
-    property IrcSession session: IrcSession {}
+    property variant sessions: {}
+    property SessionFactory sfact: SessionFactory {}
     property IrcCommand cmd: IrcCommand {}
     property BufferWrapper currentChannel: BufferWrapper { }
+    property string currentNetwork: ""
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {}
         settingsAction: SettingsActionItem {}
@@ -18,14 +21,6 @@ NavigationPane {
                 imageSource: "asset:///icons/ic_add.png"
                 onTriggered: {
                     networkDialog.open();
-                }
-            },
-            ActionItem {
-                title: "Join channel"
-                ActionBar.placement: ActionBarPlacement.OnBar
-                imageSource: "asset:///icons/ic_add.png"
-                onTriggered: {
-                    channelDialog.open();
                 }
             }
         ]
@@ -42,15 +37,9 @@ NavigationPane {
                          
                         Header {
                             title: ListItemData
+                            subtitle: "Add channel"
                             contextActions: [
                                 ActionSet {
-                                    ActionItem {
-                                        title: "Join channel"
-                                        imageSource: "asset:///icons/ic_add.png"
-                                        onTriggered: {
-                                            channelDialog.open();
-                                        }
-                                    }
                                     DeleteActionItem {
                                         title: "Delete Network"
                                     }
@@ -75,10 +64,15 @@ NavigationPane {
                 ] // end of listItemComponents list
                 onTriggered: {
                     var selectedItem = dataModel.data(indexPath);
-                    currentChannel = selectedItem //hier moet iets komen zodat bekend wordt in welk channel je zit
-                    var newPage = channel.createObject();
-                    root.push(newPage);
-                    
+                    console.log(JSON.stringify(selectedItem), JSON.stringify(indexPath));
+                    if(indexPath.length == 1) { //header
+                      currentNetwork = selectedItem;
+                      joinDialog.show();
+                    } else { //item
+                      currentChannel = selectedItem;
+                      var newPage = channel.createObject();
+                      root.push(newPage);
+                    }
                 }
             }
         }
@@ -88,21 +82,17 @@ NavigationPane {
             id: channel
             source: "channel.qml"
         },
-        Dialog {
-            id: channelDialog
-            Container {
-                TextField {
-                    id: roomname
-                    text: "#test"
-                    inputMode: TextFieldInputMode.Text
-                }
-                Button {
-                    text: "Join"
-                    onClicked: {
-                        channelDialog.close();
-                        var command = cmd.createJoin(roomname.text);
-                        session.sendCommand(command);
-                    }
+        SystemPrompt {
+            id: joinDialog
+            title: "Join a channel"
+            body: "Enter channel name"
+            inputField.defaultText: "#"
+            onFinished: {
+                var roomname = joinDialog.inputFieldTextEntry();
+                console.log(roomname);
+                if(roomname !== "") {
+                  var command = cmd.createJoin(roomname);
+                  sessions[currentNetwork].sendCommand(command);
                 }
             }
         },
@@ -125,13 +115,21 @@ NavigationPane {
                 Button {
                     text: "Connect"
                     onClicked: {
-                      session.host = server.text || "irc.freenode.net";
-                      session.userName = nick.text || "guest";
-                      session.nickName = nick.text || "guest";
-                      session.realName = "TinCan User";
-                      session.open();
+                      var host = server.text || "irc.freenode.net";
+                      if(!sessions[host]) {
+                        var session = sfact.createSession();
+                        session.host = host;
+                        session.userName = nick.text || "guest";
+                        session.nickName = nick.text || "guest";
+                        session.realName = "TinCan User";
+                        session.open();
 
-                      chanmod.addSession(session);
+                        chanmod.addSession(session);
+
+                        var ss = sessions
+                        ss[session.host] = session;
+                        sessions = ss;
+                      }
 
                       networkDialog.close()
                     }
