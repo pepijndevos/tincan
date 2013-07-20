@@ -99,7 +99,7 @@ NavigationPane {
         Dialog {
             id: networkDialog
             Container {
-                background: SystemDefaults.Paints.containerBackground
+                background: Color.create("#99000000")
                 horizontalAlignment: HorizontalAlignment.Fill
                 verticalAlignment: VerticalAlignment.Fill
                 TextField {
@@ -112,26 +112,37 @@ NavigationPane {
                     inputMode: TextFieldInputMode.Text
                     text: "riktincantest"
                 }
-                Button {
-                    text: "Connect"
-                    onClicked: {
-                      var host = server.text || "irc.freenode.net";
-                      if(!sessions[host]) {
-                        var session = sfact.createSession();
-                        session.host = host;
-                        session.userName = nick.text || "guest";
-                        session.nickName = nick.text || "guest";
-                        session.realName = "TinCan User";
-                        session.open();
+                Container {
+                    layout: StackLayout {
+                        orientation: LayoutOrientation.LeftToRight
+                    }
+                    Button {
+                        text: "Connect"
+                        onClicked: {
+                          var host = server.text || "irc.freenode.net";
+                          if(!sessions[host]) {
+                            var session = sfact.createSession();
+                            session.host = host;
+                            session.userName = nick.text || "guest";
+                            session.nickName = nick.text || "guest";
+                            session.realName = "TinCan User";
+                            session.open();
 
-                        chanmod.addSession(session);
+                            chanmod.addSession(session);
 
-                        var ss = sessions
-                        ss[session.host] = session;
-                        sessions = ss;
-                      }
+                            var ss = sessions
+                            ss[session.host] = session;
+                            sessions = ss;
+                          }
 
-                      networkDialog.close()
+                          networkDialog.close()
+                        }
+                    }
+                    Button {
+                        text: "Cancel"
+                        onClicked: {
+                          networkDialog.close()
+                        }
                     }
                 }
             }
