@@ -103,14 +103,37 @@ NavigationPane {
                 horizontalAlignment: HorizontalAlignment.Fill
                 verticalAlignment: VerticalAlignment.Fill
                 TextField {
+                    id: networkName
+                    inputMode: TextFieldInputMode.Text
+                    hintText: "ID, optional"
+                }
+                TextField {
                     id: server
                     inputMode: TextFieldInputMode.Url
-                    text: "irc.freenode.net"
+                    hintText: "irc.freenode.net"
+                    onTextChanging: {
+                      networkName.text = text;
+                    }
+                }
+                TextField {
+                    id: port
+                    inputMode: TextFieldInputMode.PhoneNumber //weird
+                    hintText: "6667"
+                }
+                CheckBox {
+                    id: ssl
+                    checked: false
+                    text: "SSL"
                 }
                 TextField {
                     id: nick
                     inputMode: TextFieldInputMode.Text
-                    text: "riktincantest"
+                    hintText: "nickname"
+                }
+                TextField {
+                    id: password
+                    inputMode: TextFieldInputMode.Password
+                    hintText: "password, optional"
                 }
                 Container {
                     layout: StackLayout {
@@ -119,19 +142,26 @@ NavigationPane {
                     Button {
                         text: "Connect"
                         onClicked: {
-                          var host = server.text || "irc.freenode.net";
-                          if(!sessions[host]) {
+                          var host = server.text || server.hintText;
+                          var name = nick.text || "tincan";
+                          var id = networkName.text || (host + ":" + name);
+                          if(!sessions[id]) {
                             var session = sfact.createSession();
                             session.host = host;
-                            session.userName = nick.text || "guest";
-                            session.nickName = nick.text || "guest";
+                            session.port = parseInt(port.text || port.hintText);
+                            session.secure = ssl.checked;
+                            session.userName = nick.text || "tincan";
+                            session.nickName = nick.text || "tincan";
                             session.realName = "TinCan User";
+                            session.password.connect(function(pw) {
+                              //TODO this doesn't work
+                            });
                             session.open();
 
                             chanmod.addSession(session);
 
                             var ss = sessions
-                            ss[session.host] = session;
+                            ss[id] = session;
                             sessions = ss;
                           }
 
