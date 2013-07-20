@@ -1,7 +1,5 @@
 #include "channelmodel.hpp"
-#include "bufferwrapper.hpp"
 #include <QDebug>
-#include <bb/cascades/ItemGrouping>
 
 ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) { }
 
@@ -17,6 +15,8 @@ void ChannelModel::addSession(IrcSession *session) {
 }
 
 void ChannelModel::bufferAdded(IrcBuffer* buf) {
+    wrappers.insert(buf, new BufferWrapper(buf));
+
     QVariantList indexPath = QVariantList();
     int sessionIndex = sessions.indexOf(buf->model());
     int bufferIndex = buf->model()->buffers().indexOf(buf);
@@ -26,6 +26,8 @@ void ChannelModel::bufferAdded(IrcBuffer* buf) {
 }
 
 void ChannelModel::bufferRemoved(IrcBuffer* buf) {
+    wrappers.remove(buf);
+
     QVariantList indexPath = QVariantList();
     int sessionIndex = sessions.indexOf(buf->model());
     int bufferIndex = buf->model()->buffers().indexOf(buf);
@@ -64,7 +66,8 @@ QVariant ChannelModel::data(const QVariantList &indexPath) {
         QString user = s->session()->userName();
         return host + ":" + user;
     } else {
-        BufferWrapper* bw = new BufferWrapper(s->buffers().value(indexPath.value(1).toInt()));
+        IrcBuffer* b = s->buffers().value(indexPath.value(1).toInt());
+        BufferWrapper* bw = wrappers.value(b);
         return QVariant::fromValue(bw);
     }
 }

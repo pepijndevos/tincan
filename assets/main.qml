@@ -103,17 +103,9 @@ NavigationPane {
                 horizontalAlignment: HorizontalAlignment.Fill
                 verticalAlignment: VerticalAlignment.Fill
                 TextField {
-                    id: networkName
-                    inputMode: TextFieldInputMode.Text
-                    hintText: "ID, optional"
-                }
-                TextField {
                     id: server
                     inputMode: TextFieldInputMode.Url
                     hintText: "irc.freenode.net"
-                    onTextChanging: {
-                      networkName.text = text;
-                    }
                 }
                 TextField {
                     id: port
@@ -144,7 +136,7 @@ NavigationPane {
                         onClicked: {
                           var host = server.text || server.hintText;
                           var name = nick.text || "tincan";
-                          var id = networkName.text || (host + ":" + name);
+                          var id = (host + ":" + name);
                           if(!sessions[id]) {
                             var session = sfact.createSession();
                             session.host = host;

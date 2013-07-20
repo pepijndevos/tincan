@@ -6,6 +6,7 @@
 #include <IrcSession>
 #include <IrcBufferModel>
 #include <IrcBuffer>
+#include "bufferwrapper.hpp"
 
 using namespace bb::cascades;
 
@@ -31,8 +32,8 @@ signals:
     void itemRemoved (QVariantList indexPath);
 
 private:
-
     QList<IrcBufferModel*> sessions;
+    QMap<IrcBuffer*, BufferWrapper*> wrappers;
 };
 
 
