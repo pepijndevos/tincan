@@ -5,7 +5,6 @@ import Communi 1.0
 NavigationPane {
     id: root
     property variant sessions: {}
-    property SessionFactory sfact: SessionFactory {}
     property IrcCommand cmd: IrcCommand {}
     property BufferWrapper currentChannel: BufferWrapper { }
     property string currentNetwork: ""
@@ -138,7 +137,7 @@ NavigationPane {
                           var name = nick.text || "tincan";
                           var id = (host + ":" + name);
                           if(!sessions[id]) {
-                            var session = sfact.createSession();
+                            var session = chanmod.addSession();
                             session.host = host;
                             session.port = parseInt(port.text || port.hintText);
                             session.secure = ssl.checked;
@@ -149,8 +148,6 @@ NavigationPane {
                               //TODO this doesn't work
                             });
                             session.open();
-
-                            chanmod.addSession(session);
 
                             var ss = sessions
                             ss[id] = session;

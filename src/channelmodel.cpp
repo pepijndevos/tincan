@@ -3,7 +3,9 @@
 
 ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) { }
 
-void ChannelModel::addSession(IrcSession *session) {
+IrcSession* ChannelModel::addSession() {
+    IrcSession* session = new IrcSession();
+
     IrcBufferModel* model = new IrcBufferModel(session);
     connect(model, SIGNAL(added(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
     connect(model, SIGNAL(removed(IrcBuffer*)), this, SLOT(bufferRemoved(IrcBuffer*)));
@@ -12,6 +14,8 @@ void ChannelModel::addSession(IrcSession *session) {
     QVariantList indexPath = QVariantList();
     indexPath.append(sessions.indexOf(model));
     emit itemAdded(indexPath);
+
+    return session;
 }
 
 void ChannelModel::bufferAdded(IrcBuffer* buf) {

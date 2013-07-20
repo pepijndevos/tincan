@@ -23,7 +23,7 @@ public:
     QVariant data(const QVariantList &indexPath);
 
 public slots:
-    void addSession(IrcSession *session);
+    IrcSession* addSession();
     void bufferAdded(IrcBuffer* buf);
     void bufferRemoved(IrcBuffer* buf);
 
