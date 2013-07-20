@@ -9,17 +9,30 @@
 
 using namespace bb::cascades;
 
-class ChannelModel : public GroupDataModel
+class ChannelModel : public DataModel
 {
     Q_OBJECT
 public:
     ChannelModel(QObject *parent=0);
     virtual ~ChannelModel() {}
 
+    int childCount(const QVariantList &indexPath);
+    bool hasChildren(const QVariantList &indexPath);
+    QString itemType(const QVariantList &indexPath);
+    QVariant data(const QVariantList &indexPath);
+
 public slots:
     void addSession(IrcSession *session);
     void bufferAdded(IrcBuffer* buf);
     void bufferRemoved(IrcBuffer* buf);
+
+signals:
+    void itemAdded (QVariantList indexPath);
+    void itemRemoved (QVariantList indexPath);
+
+private:
+
+    QList<IrcBufferModel*> sessions;
 };
 
 

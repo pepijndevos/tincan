@@ -33,7 +33,7 @@ NavigationPane {
                 horizontalAlignment: HorizontalAlignment.Center
                 listItemComponents: [
                     ListItemComponent {
-                        type: "header"
+                        type: "network"
                          
                         Header {
                             title: ListItemData
@@ -48,7 +48,7 @@ NavigationPane {
                         }
                     },
                     ListItemComponent {
-                        type: "item"
+                        type: "channel"
                           
                         StandardListItem {
                             title: ListItemData.title

@@ -39,4 +39,6 @@ private:
 
 };
 
+Q_DECLARE_METATYPE( BufferWrapper* )
+
 #endif /* BufferWrapper_HPP_ */
