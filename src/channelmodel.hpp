@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <bb/cascades/GroupDataModel>
+#include <bb/platform/Notification>
 #include <IrcSession>
 #include <IrcBufferModel>
 #include <IrcBuffer>
@@ -26,7 +27,7 @@ public slots:
     IrcSession* addSession();
     void bufferAdded(IrcBuffer* buf);
     void bufferRemoved(IrcBuffer* buf);
-
+    void notifyMention(IrcPrivateMessage* message);
 signals:
     void itemAdded (QVariantList indexPath);
     void itemRemoved (QVariantList indexPath);

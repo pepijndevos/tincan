@@ -3,7 +3,7 @@ INCLUDEPATH += . src
 
 CONFIG += qt cascades
 
-LIBS += -lbbsystem
+LIBS += -lbbsystem -lbbplatform
 
 # Input
 HEADERS += src/applicationui.hpp \
