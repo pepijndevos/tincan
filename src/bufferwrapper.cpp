@@ -12,7 +12,9 @@ QString BufferWrapper::getTitle() {
 }
 
 QString BufferWrapper::getNetwork() {
-    return buf->model()->session()->host();
+    QString host = buf->model()->session()->host();
+    QString user = buf->model()->session()->userName();
+    return host + ":" + user;
 }
 
 IrcBuffer* BufferWrapper::getBuffer() {

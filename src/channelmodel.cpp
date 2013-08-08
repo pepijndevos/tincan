@@ -9,7 +9,7 @@ IrcSession* ChannelModel::addSession() {
 
     IrcBufferModel* model = new IrcBufferModel(session);
     connect(model, SIGNAL(added(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
-    connect(model, SIGNAL(removed(IrcBuffer*)), this, SLOT(bufferRemoved(IrcBuffer*)));
+    connect(model, SIGNAL(aboutToBeRemoved(IrcBuffer*)), this, SLOT(bufferRemoved(IrcBuffer*)));
     sessions.append(model);
 
     QVariantList indexPath = QVariantList();
@@ -36,6 +36,7 @@ void ChannelModel::bufferRemoved(IrcBuffer* buf) {
     QVariantList indexPath = QVariantList();
     int sessionIndex = sessions.indexOf(buf->model());
     int bufferIndex = buf->model()->buffers().indexOf(buf);
+    qDebug() << sessionIndex << bufferIndex;
     indexPath.append(sessionIndex);
     indexPath.append(bufferIndex);
     emit itemRemoved(indexPath);

@@ -26,6 +26,9 @@ NavigationPane {
         Container {
             layout: DockLayout {}
             ListView {
+                property alias cmd: root.cmd
+                property alias sessions: root.sessions
+
                 id: channelList
                 dataModel: ChannelModel { id: chanmod }
                 verticalAlignment: VerticalAlignment.Top
@@ -51,10 +54,16 @@ NavigationPane {
                           
                         StandardListItem {
                             title: ListItemData.title
+                            id: itemRoot
                             contextActions: [
                                 ActionSet {
                                     DeleteActionItem {
                                         title: "Leave channel"
+                                        onTriggered: {
+                                            console.log(JSON.stringify(ListItemData));
+                                            var command = itemRoot.ListItem.view.cmd.createPart(ListItemData.title);
+                                            itemRoot.ListItem.view.sessions[ListItemData.network].sendCommand(command);
+                                        }
                                     }
                                 }
                             ]
