@@ -39,11 +39,16 @@ NavigationPane {
                          
                         Header {
                             title: ListItemData
+                            id: itemRoot
                             subtitle: "Add channel"
                             contextActions: [
                                 ActionSet {
                                     DeleteActionItem {
                                         title: "Delete Network"
+                                        onTriggered: {
+                                            var s = itemRoot.ListItem.view.sessions[ListItemData];
+                                            itemRoot.ListItem.view.dataModel.removeSession(s);
+                                        }
                                     }
                                 }
                             ]

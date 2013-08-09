@@ -25,6 +25,7 @@ public:
 
 public slots:
     IrcSession* addSession();
+    void removeSession(IrcSession*);
     void bufferAdded(IrcBuffer* buf);
     void bufferRemoved(IrcBuffer* buf);
     void notifyMention(IrcPrivateMessage* message);

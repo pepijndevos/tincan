@@ -19,6 +19,23 @@ IrcSession* ChannelModel::addSession() {
     return session;
 }
 
+void ChannelModel::removeSession(IrcSession* s) {
+    s->quit("Goodbye from TinCan");
+    s->close(); //bad?
+    const int listSize = sessions.size();
+    for (int i = 0; i < listSize; ++i) {
+        IrcBufferModel* model = sessions.at(i);
+        if(model->session() == s) {
+            sessions.removeAt(i);
+
+            QVariantList indexPath = QVariantList();
+            indexPath.append(i);
+            emit itemRemoved(indexPath);
+            break;
+        }
+    }
+}
+
 void ChannelModel::bufferAdded(IrcBuffer* buf) {
     wrappers.insert(buf, new BufferWrapper(buf));
 
