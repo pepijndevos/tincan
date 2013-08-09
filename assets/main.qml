@@ -68,7 +68,7 @@ NavigationPane {
                                     DeleteActionItem {
                                         title: "Delete Network"
                                         onTriggered: {
-                                            var s = itemRoot.ListItem.view.sessions[ListItemData.host + ":" + ListitemData.user];
+                                            var s = itemRoot.ListItem.view.sessions[ListItemData.host + ":" + ListItemData.user];
                                             itemRoot.ListItem.view.dataModel.removeSession(s);
                                         }
                                     }
