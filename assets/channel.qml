@@ -82,28 +82,18 @@ Page {
                 }
             ]
         }
-        Container {
-            layout: StackLayout {
-                orientation: LayoutOrientation.LeftToRight
-            }
-            TextField {
-                id: msgbar
-                inputMode: TextFieldInputMode.Chat
-                input {
-                    onSubmitted: {
-                        var command = cmd.createMessage(currentChannel.buffer.title, msgbar.text);
-                        currentChannel.buffer.sendCommand(command);
-                        currentChannel.addMessage(command);
-                        msgbar.text = "";
-                    }
+        TextField {
+            id: msgbar
+            inputMode: TextFieldInputMode.Chat
+            input {
+                onSubmitted: {
+                    var command = cmd.createMessage(currentChannel.buffer.title, msgbar.text);
+                    currentChannel.buffer.sendCommand(command);
+                    currentChannel.addMessage(command);
+                    msgbar.text = "";
                 }
             }
-            ImageView {
-                imageSource: "asset:///icons/ic_add.png"
-            }
-
         }
-
     }
     onCreationCompleted: {
         chanTitle.text = currentChannel.buffer.title;
