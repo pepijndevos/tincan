@@ -29,9 +29,11 @@ public slots:
     void bufferAdded(IrcBuffer* buf);
     void bufferRemoved(IrcBuffer* buf);
     void notifyMention(IrcPrivateMessage* message);
+    void notifyConnected(bool con);
 signals:
     void itemAdded (QVariantList indexPath);
     void itemRemoved (QVariantList indexPath);
+    void itemUpdated (QVariantList indexPath);
 
 private:
     QList<IrcBufferModel*> sessions;

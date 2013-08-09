@@ -32,26 +32,51 @@ NavigationPane {
                 id: channelList
                 dataModel: ChannelModel { id: chanmod }
                 verticalAlignment: VerticalAlignment.Top
-                horizontalAlignment: HorizontalAlignment.Center
+                horizontalAlignment: HorizontalAlignment.Fill
                 listItemComponents: [
                     ListItemComponent {
                         type: "network"
                          
-                        Header {
-                            title: ListItemData
+                        Container {
                             id: itemRoot
-                            subtitle: "Add channel"
+                            Container {
+                                layout: StackLayout {
+                                    orientation: LayoutOrientation.LeftToRight
+                                }
+                                Container {
+                                    topPadding: 10
+                                    leftPadding: 10
+                                    layoutProperties: StackLayoutProperties {
+                                        spaceQuota: 1
+                                    }
+                                    Label {
+                                        text: ListItemData.host + ":" + ListItemData.user
+                                    }
+                                }
+                                ImageView {
+                                    imageSource: "asset:///icons/ic_add.png"
+                                }
+                            }
+                            Container {
+                                id: statusBorder
+                                horizontalAlignment: HorizontalAlignment.Fill
+                                minHeight: 5
+                                background: ListItemData.connected ? Color.Green : Color.Red
+                            }
                             contextActions: [
                                 ActionSet {
                                     DeleteActionItem {
                                         title: "Delete Network"
                                         onTriggered: {
-                                            var s = itemRoot.ListItem.view.sessions[ListItemData];
+                                            var s = itemRoot.ListItem.view.sessions[ListItemData.host + ":" + ListitemData.user];
                                             itemRoot.ListItem.view.dataModel.removeSession(s);
                                         }
                                     }
                                 }
                             ]
+                            onCreationCompleted: {
+                               console.log("created");
+                            }
                         }
                     },
                     ListItemComponent {
@@ -79,13 +104,16 @@ NavigationPane {
                     var selectedItem = dataModel.data(indexPath);
                     console.log(JSON.stringify(selectedItem), JSON.stringify(indexPath));
                     if(indexPath.length == 1) { //header
-                      currentNetwork = selectedItem;
+                      currentNetwork = selectedItem.host + ":" + selectedItem.user;
                       joinDialog.show();
                     } else { //item
                       currentChannel = selectedItem;
                       var newPage = channel.createObject();
                       root.push(newPage);
                     }
+                }
+                onDataModelChanged: {
+                    console.log("changed##########################################################");
                 }
             }
         }

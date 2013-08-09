@@ -6,6 +6,7 @@ ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) { }
 IrcSession* ChannelModel::addSession() {
     IrcSession* session = new IrcSession();
     connect(session, SIGNAL(privateMessageReceived(IrcPrivateMessage*)), this, SLOT(notifyMention(IrcPrivateMessage*)));
+    connect(session, SIGNAL(connectedChanged(bool)), this, SLOT(notifyConnected(bool)));
 
     IrcBufferModel* model = new IrcBufferModel(session);
     connect(model, SIGNAL(added(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
@@ -85,9 +86,11 @@ QString ChannelModel::itemType(const QVariantList &indexPath) {
 QVariant ChannelModel::data(const QVariantList &indexPath) {
     IrcBufferModel* s = sessions.value(indexPath.value(0).toInt());
     if (indexPath.length() == 1) {
-        QString host = s->session()->host();
-        QString user = s->session()->userName();
-        return host + ":" + user;
+        QVariantMap map;
+        map["host"] =  s->session()->host();
+        map["user"] = s->session()->userName();
+        map["connected"] = s->session()->isConnected();
+        return map;
     } else {
         IrcBuffer* b = s->buffers().value(indexPath.value(1).toInt());
         BufferWrapper* bw = wrappers.value(b);
@@ -105,5 +108,19 @@ void ChannelModel::notifyMention(IrcPrivateMessage* m) {
         pNotification->setBody(m->message());
          
         pNotification->notify();
+    }
+}
+
+void ChannelModel::notifyConnected(bool con) {
+    IrcSession* s = (IrcSession*)sender();
+    const int listSize = sessions.size();
+    for (int i = 0; i < listSize; ++i) {
+        IrcBufferModel* model = sessions.at(i);
+        if(model->session() == s) {
+            QVariantList indexPath = QVariantList();
+            indexPath.append(i);
+            emit itemUpdated(indexPath);
+            break;
+        }
     }
 }
