@@ -8,6 +8,8 @@ ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) {
 IrcSession* ChannelModel::addSession() {
     IrcSession* session = new IrcSession();
     connect(session, SIGNAL(privateMessageReceived(IrcPrivateMessage*)), this, SLOT(notifyMention(IrcPrivateMessage*)));
+    connect(session, SIGNAL(numericMessageReceived(IrcNumericMessage*)), this, SLOT(notifyError(IrcNumericMessage*)));
+    connect(session, SIGNAL(noticeMessageReceived(IrcNoticeMessage*)), this, SLOT(notifyNotice(IrcNoticeMessage*)));
     connect(session, SIGNAL(connectedChanged(bool)), this, SLOT(notifyConnected(bool)));
 
     IrcBufferModel* model = new IrcBufferModel(session);
@@ -148,6 +150,18 @@ void ChannelModel::notifyMention(IrcPrivateMessage* m) {
          
         pNotification->notify();
     }
+}
+
+void ChannelModel::notifyError(IrcNumericMessage* m) {
+    if (QByteArray(Irc::toString(m->code())).startsWith("ERR_")) {
+        toast.setBody("ERROR: " + m->parameters().last());
+        toast.show();
+    }
+}
+
+void ChannelModel::notifyNotice(IrcNoticeMessage* m) {
+    toast.setBody(m->message());
+    toast.show();
 }
 
 void ChannelModel::notifyConnected(bool con) {

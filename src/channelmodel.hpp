@@ -4,6 +4,7 @@
 #include <QObject>
 #include <bb/cascades/GroupDataModel>
 #include <bb/platform/Notification>
+#include <bb/system/SystemToast>
 #include <IrcSession>
 #include <IrcBufferModel>
 #include <IrcBuffer>
@@ -32,6 +33,8 @@ public slots:
     void bufferAdded(IrcBuffer* buf);
     void bufferRemoved(IrcBuffer* buf);
     void notifyMention(IrcPrivateMessage* message);
+    void notifyError(IrcNumericMessage* message);
+    void notifyNotice(IrcNoticeMessage* message);
     void notifyConnected(bool con);
 signals:
     void itemAdded (QVariantList indexPath);
@@ -41,6 +44,7 @@ signals:
 private:
     QList<IrcBufferModel*> sessions;
     QMap<IrcBuffer*, BufferWrapper*> wrappers;
+    bb::system::SystemToast toast;
     void loadSessions();
 };
 
