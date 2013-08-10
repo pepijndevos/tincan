@@ -151,6 +151,10 @@ NavigationPane {
         Dialog {
             id: networkDialog
             Container {
+                topPadding: 40
+                bottomMargin: 40
+                leftPadding: 40
+                rightPadding: 40
                 background: Color.create("#99000000")
                 horizontalAlignment: HorizontalAlignment.Fill
                 verticalAlignment: VerticalAlignment.Fill
