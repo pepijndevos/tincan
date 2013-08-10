@@ -1,7 +1,9 @@
 #include "channelmodel.hpp"
 #include <QDebug>
 
-ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) { }
+ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) {
+    loadSessions();
+}
 
 IrcSession* ChannelModel::addSession() {
     IrcSession* session = new IrcSession();
@@ -29,6 +31,9 @@ void ChannelModel::removeSession(IrcSession* s) {
         if(model->session() == s) {
             sessions.removeAt(i);
 
+            QSettings settings;
+            settings.remove(s->host() + ":" + s->userName());
+
             QVariantList indexPath = QVariantList();
             indexPath.append(i);
             emit itemRemoved(indexPath);
@@ -36,6 +41,38 @@ void ChannelModel::removeSession(IrcSession* s) {
             delete s;
             break;
         }
+    }
+}
+
+void ChannelModel::saveSession(IrcSession* session) {
+    QSettings settings;
+
+    qDebug() << settings.fileName();
+    
+    settings.beginGroup(session->host() + ":" + session->userName());
+    settings.setValue("host", session->host());
+    settings.setValue("port", session->port());
+    settings.setValue("secure", session->isSecure());
+    settings.setValue("username", session->userName());
+    settings.endGroup();
+}
+
+void ChannelModel::loadSessions() {
+    QSettings settings;
+    foreach(QString network, settings.childGroups()) {
+        qDebug() << network;
+        IrcSession* s = addSession();
+
+        settings.beginGroup(network);
+        s->setHost(settings.value("host").toString());
+        s->setPort(settings.value("port").toInt());
+        s->setSecure(settings.value("secure").toBool());
+        s->setUserName(settings.value("username").toString());
+        s->setNickName(settings.value("username").toString());
+        s->setRealName("TinCan User");
+        settings.endGroup();
+        
+        s->open();
     }
 }
 
@@ -92,11 +129,8 @@ BufferWrapper* ChannelModel::getWrapper(IrcBuffer* buf) {
 QVariant ChannelModel::data(const QVariantList &indexPath) {
     IrcBufferModel* s = sessions.value(indexPath.value(0).toInt());
     if (indexPath.length() == 1) {
-        QVariantMap map;
-        map["host"] =  s->session()->host();
-        map["user"] = s->session()->userName();
-        map["connected"] = s->session()->isConnected();
-        return map;
+        SessionWrapper* sw = new SessionWrapper(s->session());
+        return QVariant::fromValue(sw);
     } else {
         IrcBuffer* b = s->buffers().value(indexPath.value(1).toInt());
         BufferWrapper* bw = getWrapper(b);

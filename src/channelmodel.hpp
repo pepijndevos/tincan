@@ -8,6 +8,7 @@
 #include <IrcBufferModel>
 #include <IrcBuffer>
 #include "bufferwrapper.hpp"
+#include "sessionwrapper.hpp"
 
 using namespace bb::cascades;
 
@@ -23,10 +24,11 @@ public:
     QString itemType(const QVariantList &indexPath);
     QVariant data(const QVariantList &indexPath);
     Q_INVOKABLE BufferWrapper* getWrapper(IrcBuffer*);
+    Q_INVOKABLE IrcSession* addSession();
+    Q_INVOKABLE void removeSession(IrcSession*);
+    Q_INVOKABLE void saveSession(IrcSession*);
 
 public slots:
-    IrcSession* addSession();
-    void removeSession(IrcSession*);
     void bufferAdded(IrcBuffer* buf);
     void bufferRemoved(IrcBuffer* buf);
     void notifyMention(IrcPrivateMessage* message);
@@ -39,6 +41,7 @@ signals:
 private:
     QList<IrcBufferModel*> sessions;
     QMap<IrcBuffer*, BufferWrapper*> wrappers;
+    void loadSessions();
 };
 
 

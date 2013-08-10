@@ -4,10 +4,9 @@ import Communi 1.0
 
 NavigationPane {
     id: root
-    property variant sessions: {}
     property IrcCommand cmd: IrcCommand {}
     property BufferWrapper currentChannel: BufferWrapper { }
-    property string currentNetwork: ""
+    property IrcSession currentNetwork: undefined
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {
             title: "Help & Feedback"
@@ -41,7 +40,6 @@ NavigationPane {
             layout: DockLayout {}
             ListView {
                 property alias cmd: root.cmd
-                property alias sessions: root.sessions
 
                 id: channelList
                 dataModel: ChannelModel { id: chanmod }
@@ -83,7 +81,7 @@ NavigationPane {
                                         title: "Reconnect"
                                         imageSource: "asset:///icons/ic_rotate.png"
                                         onTriggered: {
-                                            var s = itemRoot.ListItem.view.sessions[ListItemData.host + ":" + ListItemData.user];
+                                            var s = ListItemData.session;
                                             s.close();
                                             s.open();
                                         }
@@ -91,12 +89,7 @@ NavigationPane {
                                     DeleteActionItem {
                                         title: "Delete Network"
                                         onTriggered: {
-                                            var sessions = itemRoot.ListItem.view.sessions;
-                                            var name = ListItemData.host + ":" + ListItemData.user
-                                            var s = sessions[name];
-                                            delete sessions[name];
-                                            itemRoot.ListItem.view.sessions = sessions;
-                                            itemRoot.ListItem.view.dataModel.removeSession(s);
+                                            itemRoot.ListItem.view.dataModel.removeSession(ListItemData.session);
                                         }
                                     }
                                 }
@@ -131,7 +124,7 @@ NavigationPane {
                     var selectedItem = dataModel.data(indexPath);
                     console.log(JSON.stringify(selectedItem), JSON.stringify(indexPath));
                     if(indexPath.length == 1) { //header
-                      currentNetwork = selectedItem.host + ":" + selectedItem.user;
+                      currentNetwork = selectedItem.session;
                       joinDialog.show();
                     } else { //item
                       currentChannel = selectedItem;
@@ -157,7 +150,7 @@ NavigationPane {
                 console.log(roomname);
                 if(roomname !== "") {
                   var command = cmd.createJoin(roomname);
-                  sessions[currentNetwork].sendCommand(command);
+                  currentNetwork.sendCommand(command);
                 }
             }
         },
@@ -205,24 +198,19 @@ NavigationPane {
                         onClicked: {
                           var host = server.text || server.hintText;
                           var name = nick.text || "tincan";
-                          var id = (host + ":" + name);
-                          if(!sessions[id]) {
-                            var session = chanmod.addSession();
-                            session.host = host;
-                            session.port = parseInt(port.text || port.hintText);
-                            session.secure = ssl.checked;
-                            session.userName = nick.text || "tincan";
-                            session.nickName = nick.text || "tincan";
-                            session.realName = "TinCan User";
-                            session.password.connect(function(pw) {
-                              //TODO this doesn't work
-                            });
-                            session.open();
 
-                            var ss = sessions
-                            ss[id] = session;
-                            sessions = ss;
-                          }
+                          var session = chanmod.addSession();
+                          session.host = host;
+                          session.port = parseInt(port.text || port.hintText);
+                          session.secure = ssl.checked;
+                          session.userName = nick.text || "tincan";
+                          session.nickName = nick.text || "tincan";
+                          session.realName = "TinCan User";
+                          session.password.connect(function(pw) {
+                            //TODO this doesn't work
+                          });
+                          session.open();
+                          chanmod.saveSession(session);
 
                           networkDialog.close()
                         }
