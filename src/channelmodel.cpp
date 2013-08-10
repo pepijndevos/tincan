@@ -99,7 +99,6 @@ QVariant ChannelModel::data(const QVariantList &indexPath) {
 }
 
 void ChannelModel::notifyMention(IrcPrivateMessage* m) {
-    qDebug() << "eeeerrrrng!!!!!!!";
     if(m->message().contains(m->session()->nickName())) {
         //TODO only send notifications for backgrounded channels
         bb::platform::Notification* pNotification = new bb::platform::Notification();

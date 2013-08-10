@@ -74,9 +74,6 @@ NavigationPane {
                                     }
                                 }
                             ]
-                            onCreationCompleted: {
-                               console.log("created");
-                            }
                         }
                     },
                     ListItemComponent {
@@ -111,9 +108,6 @@ NavigationPane {
                       var newPage = channel.createObject();
                       root.push(newPage);
                     }
-                }
-                onDataModelChanged: {
-                    console.log("changed##########################################################");
                 }
             }
         }
