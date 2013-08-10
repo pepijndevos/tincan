@@ -68,7 +68,7 @@ NavigationPane {
                                     }
                                 }
                                 ImageView {
-                                    imageSource: "asset:///icons/ic_add.png"
+                                    imageSource: "asset:///icons/ic_add_dark.png"
                                 }
                             }
                             Container {
