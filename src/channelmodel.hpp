@@ -22,6 +22,7 @@ public:
     bool hasChildren(const QVariantList &indexPath);
     QString itemType(const QVariantList &indexPath);
     QVariant data(const QVariantList &indexPath);
+    Q_INVOKABLE BufferWrapper* getWrapper(IrcBuffer*);
 
 public slots:
     IrcSession* addSession();

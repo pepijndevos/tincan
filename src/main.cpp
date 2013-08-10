@@ -24,6 +24,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
     qmlRegisterType<IrcBuffer>("Communi", 1, 0, "IrcBuffer");
     qmlRegisterType<BufferWrapper>("Communi", 1, 0, "BufferWrapper");
+    qmlRegisterType<IrcBufferModel>("Communi", 1, 0, "IrcBufferModel");
     qmlRegisterType<IrcCommand>("Communi", 1, 0, "IrcCommand");
     qmlRegisterType<ChannelModel>("Communi", 1, 0, "ChannelModel");
     qmlRegisterType<UserModel>("Communi", 1, 0, "UserModel");

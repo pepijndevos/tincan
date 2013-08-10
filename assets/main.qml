@@ -88,8 +88,11 @@ NavigationPane {
                                         title: "Leave channel"
                                         onTriggered: {
                                             console.log(JSON.stringify(ListItemData));
-                                            var command = itemRoot.ListItem.view.cmd.createPart(ListItemData.title);
-                                            itemRoot.ListItem.view.sessions[ListItemData.network].sendCommand(command);
+                                            if(ListItemData.buffer.channel) {
+                                              ListItemData.buffer.part("");
+                                            } else {
+                                              ListItemData.buffer.model.remove(ListItemData.title);
+                                            }
                                         }
                                     }
                                 }

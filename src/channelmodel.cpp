@@ -83,6 +83,10 @@ QString ChannelModel::itemType(const QVariantList &indexPath) {
     }
 }
 
+BufferWrapper* ChannelModel::getWrapper(IrcBuffer* buf) {
+    return wrappers.value(buf);
+}
+
 QVariant ChannelModel::data(const QVariantList &indexPath) {
     IrcBufferModel* s = sessions.value(indexPath.value(0).toInt());
     if (indexPath.length() == 1) {
@@ -93,7 +97,7 @@ QVariant ChannelModel::data(const QVariantList &indexPath) {
         return map;
     } else {
         IrcBuffer* b = s->buffers().value(indexPath.value(1).toInt());
-        BufferWrapper* bw = wrappers.value(b);
+        BufferWrapper* bw = getWrapper(b);
         return QVariant::fromValue(bw);
     }
 }

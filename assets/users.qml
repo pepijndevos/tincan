@@ -43,9 +43,12 @@ Page {
             ] // end of listItemComponents list
             onTriggered: {
                 var selectedItem = dataModel.data(indexPath);
-                /*var newPage = channel.createObject();
-                root.push(newPage);*/
+                var buf = currentChannel.buffer.model.add(selectedItem.name);
+                var wr = chanmod.getWrapper(buf);
 
+                currentChannel = wr;
+                var newPage = channel.createObject();
+                root.push(newPage);
             }
 
             onCreationCompleted: {
