@@ -2,7 +2,7 @@
 
 BufferWrapper::BufferWrapper(IrcBuffer* parent) {
     buf = parent;
-    msgs = new ArrayDataModel();
+    msgs = new ArrayDataModel(this);
     
     connect(buf, SIGNAL(messageReceived(IrcMessage*)), this, SLOT(addMessage(IrcMessage*)));
 }

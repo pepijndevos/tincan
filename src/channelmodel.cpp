@@ -32,6 +32,8 @@ void ChannelModel::removeSession(IrcSession* s) {
             QVariantList indexPath = QVariantList();
             indexPath.append(i);
             emit itemRemoved(indexPath);
+
+            delete s;
             break;
         }
     }

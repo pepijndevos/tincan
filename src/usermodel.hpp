@@ -15,7 +15,7 @@ class UserModel : public GroupDataModel
     Q_OBJECT
 public:
     UserModel(QObject *parent=0);
-    virtual ~UserModel() {}
+    ~UserModel() {}
 
 public slots:
     void readChannel(BufferWrapper *channel);

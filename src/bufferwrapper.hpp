@@ -22,7 +22,7 @@ class BufferWrapper : public QObject
         
 public:
     BufferWrapper(IrcBuffer* parent=0);
-    virtual ~BufferWrapper() {}
+    ~BufferWrapper() {}
     QString getNetwork();
     QString getTitle();
     IrcBuffer* getBuffer();

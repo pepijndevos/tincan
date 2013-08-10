@@ -16,7 +16,7 @@ class ChannelModel : public DataModel
     Q_OBJECT
 public:
     ChannelModel(QObject *parent=0);
-    virtual ~ChannelModel() {}
+    ~ChannelModel() {};
 
     int childCount(const QVariantList &indexPath);
     bool hasChildren(const QVariantList &indexPath);
