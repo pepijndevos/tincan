@@ -37,7 +37,7 @@ Page {
                     type: "item"
 
                     StandardListItem {
-                        title: ListItemData.name
+                        title: (ListItemData.mode == "o" ? "@" : "") + ListItemData.name
                     }
                 } // end of ListItemComponent
             ] // end of listItemComponents list
