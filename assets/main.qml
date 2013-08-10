@@ -9,7 +9,21 @@ NavigationPane {
     property BufferWrapper currentChannel: BufferWrapper { }
     property string currentNetwork: ""
     Menu.definition: MenuDefinition {
-        helpAction: HelpActionItem {}
+        helpAction: HelpActionItem {
+            title: "Help & Feedback"
+            onTriggered: {
+                googlegroup.trigger("bb.action.OPEN");
+            }
+            attachedObjects: [
+                Invocation {
+                    id: googlegroup
+                    query {
+                        mimeType: "text/html"
+                        uri: "https://groups.google.com/forum/m/#!forum/tincan-irc"
+                    }
+                }
+            ]
+        }
         settingsAction: SettingsActionItem {}
     }
     Page {
