@@ -79,6 +79,15 @@ NavigationPane {
                             }
                             contextActions: [
                                 ActionSet {
+                                    ActionItem {
+                                        title: "Reconnect"
+                                        imageSource: "asset:///icons/ic_rotate.png"
+                                        onTriggered: {
+                                            var s = itemRoot.ListItem.view.sessions[ListItemData.host + ":" + ListItemData.user];
+                                            s.close();
+                                            s.open();
+                                        }
+                                    }
                                     DeleteActionItem {
                                         title: "Delete Network"
                                         onTriggered: {
