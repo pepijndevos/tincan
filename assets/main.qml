@@ -25,6 +25,24 @@ NavigationPane {
             ]
         }
         settingsAction: SettingsActionItem {}
+        actions: [
+          ActionItem {
+            title: "Get a Bouncer"
+            imageSource: "asset:///icons/ic_to_bottom.png"
+            onTriggered: {
+                bouncer.trigger("bb.action.OPEN");
+            }
+            attachedObjects: [
+                Invocation {
+                    id: bouncer
+                    query {
+                        mimeType: "text/html"
+                        uri: "http://teamrelaychat.nl/bouncer/"
+                    }
+                }
+            ]
+          }
+        ]
     }
     Page {
         actions: [
