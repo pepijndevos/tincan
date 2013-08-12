@@ -120,6 +120,7 @@ NavigationPane {
                           
                         StandardListItem {
                             title: ListItemData.title
+                            status: ListItemData.unread ? ListItemData.unread : ""
                             id: itemRoot
                             contextActions: [
                                 ActionSet {

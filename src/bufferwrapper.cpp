@@ -2,6 +2,7 @@
 
 BufferWrapper::BufferWrapper(IrcBuffer* parent) : QObject(parent) {
     buf = parent;
+    unread = 0;
     msgs = new ArrayDataModel(this);
     
     connect(buf, SIGNAL(messageReceived(IrcMessage*)), this, SLOT(addMessage(IrcMessage*)));
@@ -25,11 +26,17 @@ ArrayDataModel* BufferWrapper::getMessages() {
     return msgs;
 }
 
+int BufferWrapper::getUnread() {
+    return unread;
+}
 
 void BufferWrapper::addMessage(IrcMessage* msg) {
     QVariantMap map;
     switch(msg->type()) {
         case IrcMessage::Private:
+            unread++;
+            emit unreadChanged();
+
             map["message"] = ((IrcPrivateMessage*)msg)->message();
             map["sender"] = ((IrcPrivateMessage*)msg)->sender().name();
             msgs->append(map);
@@ -46,5 +53,8 @@ void BufferWrapper::addMessage(IrcCommand* cmd) {
 }
 
 void BufferWrapper::showChannel(QObject* chan){
+    unread = 0;
+    emit unreadChanged();
+
     ((ListView*)chan)->setDataModel(msgs);
 }
