@@ -9,7 +9,7 @@
 #include <IrcBufferModel>
 #include <IrcBuffer>
 #include "bufferwrapper.hpp"
-#include "sessionwrapper.hpp"
+#include "passwordmanager.hpp"
 
 using namespace bb::cascades;
 
@@ -27,7 +27,7 @@ public:
     Q_INVOKABLE BufferWrapper* getWrapper(IrcBuffer*);
     Q_INVOKABLE IrcSession* addSession();
     Q_INVOKABLE void removeSession(IrcSession*);
-    Q_INVOKABLE void saveSession(IrcSession*);
+    Q_INVOKABLE void saveSession(IrcSession*, QString password);
 
 public slots:
     void bufferAdded(IrcBuffer* buf);
@@ -35,7 +35,6 @@ public slots:
     void notifyMention(IrcPrivateMessage* message);
     void notifyError(IrcNumericMessage* message);
     void notifyNotice(IrcNoticeMessage* message);
-    void notifyConnected(bool con);
 signals:
     void itemAdded (QVariantList indexPath);
     void itemRemoved (QVariantList indexPath);
@@ -48,5 +47,6 @@ private:
     void loadSessions();
 };
 
+Q_DECLARE_METATYPE( IrcSession* )
 
 #endif /* ChannelModel_HPP_ */

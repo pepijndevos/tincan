@@ -27,7 +27,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     QCoreApplication::setApplicationName("TinCan");
 
     qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
-    qmlRegisterType<SessionWrapper>("Communi", 1, 0, "SessionWrapper");
+    qmlRegisterType<PasswordManager>("Communi", 1, 0, "PasswordManager");
     qmlRegisterType<IrcBuffer>("Communi", 1, 0, "IrcBuffer");
     qmlRegisterType<BufferWrapper>("Communi", 1, 0, "BufferWrapper");
     qmlRegisterType<IrcBufferModel>("Communi", 1, 0, "IrcBufferModel");

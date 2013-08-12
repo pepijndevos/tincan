@@ -5,6 +5,7 @@ import Communi 1.0
 NavigationPane {
     id: root
     property IrcCommand cmd: IrcCommand {}
+    property PasswordManager pwmgr: PasswordManager {}
     property BufferWrapper currentChannel: BufferWrapper { }
     property IrcSession currentNetwork: undefined
     Menu.definition: MenuDefinition {
@@ -62,7 +63,7 @@ NavigationPane {
                                         spaceQuota: 1
                                     }
                                     Label {
-                                        text: ListItemData.host + ":" + ListItemData.user
+                                        text: ListItemData.host + ":" + ListItemData.userName
                                     }
                                 }
                                 ImageView {
@@ -81,7 +82,7 @@ NavigationPane {
                                         title: "Reconnect"
                                         imageSource: "asset:///icons/ic_rotate.png"
                                         onTriggered: {
-                                            var s = ListItemData.session;
+                                            var s = ListItemData;
                                             s.close();
                                             s.open();
                                         }
@@ -89,7 +90,7 @@ NavigationPane {
                                     DeleteActionItem {
                                         title: "Delete Network"
                                         onTriggered: {
-                                            itemRoot.ListItem.view.dataModel.removeSession(ListItemData.session);
+                                            itemRoot.ListItem.view.dataModel.removeSession(ListItemData);
                                         }
                                     }
                                 }
@@ -124,7 +125,7 @@ NavigationPane {
                     var selectedItem = dataModel.data(indexPath);
                     console.log(JSON.stringify(selectedItem), JSON.stringify(indexPath));
                     if(indexPath.length == 1) { //header
-                      currentNetwork = selectedItem.session;
+                      currentNetwork = selectedItem;
                       joinDialog.show();
                     } else { //item
                       currentChannel = selectedItem;
@@ -206,11 +207,9 @@ NavigationPane {
                           session.userName = nick.text || "tincan";
                           session.nickName = nick.text || "tincan";
                           session.realName = "TinCan User";
-                          session.password.connect(function(pw) {
-                            //TODO this doesn't work
-                          });
                           session.open();
-                          chanmod.saveSession(session);
+                          pwmgr.addSession(session, password.text);
+                          chanmod.saveSession(session, password.text);
 
                           networkDialog.close()
                         }

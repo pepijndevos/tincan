@@ -10,7 +10,6 @@ IrcSession* ChannelModel::addSession() {
     connect(session, SIGNAL(privateMessageReceived(IrcPrivateMessage*)), this, SLOT(notifyMention(IrcPrivateMessage*)));
     connect(session, SIGNAL(numericMessageReceived(IrcNumericMessage*)), this, SLOT(notifyError(IrcNumericMessage*)));
     connect(session, SIGNAL(noticeMessageReceived(IrcNoticeMessage*)), this, SLOT(notifyNotice(IrcNoticeMessage*)));
-    connect(session, SIGNAL(connectedChanged(bool)), this, SLOT(notifyConnected(bool)));
 
     IrcBufferModel* model = new IrcBufferModel(session);
     connect(model, SIGNAL(added(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
@@ -46,7 +45,7 @@ void ChannelModel::removeSession(IrcSession* s) {
     }
 }
 
-void ChannelModel::saveSession(IrcSession* session) {
+void ChannelModel::saveSession(IrcSession* session, QString pwd) {
     QSettings settings;
 
     qDebug() << settings.fileName();
@@ -56,6 +55,7 @@ void ChannelModel::saveSession(IrcSession* session) {
     settings.setValue("port", session->port());
     settings.setValue("secure", session->isSecure());
     settings.setValue("username", session->userName());
+    settings.setValue("password", pwd);
     settings.endGroup();
 }
 
@@ -72,6 +72,8 @@ void ChannelModel::loadSessions() {
         s->setUserName(settings.value("username").toString());
         s->setNickName(settings.value("username").toString());
         s->setRealName("TinCan User");
+        QString pwd = settings.value("password").toString();
+        new PasswordManager(s, pwd);
         settings.endGroup();
         
         s->open();
@@ -131,8 +133,7 @@ BufferWrapper* ChannelModel::getWrapper(IrcBuffer* buf) {
 QVariant ChannelModel::data(const QVariantList &indexPath) {
     IrcBufferModel* s = sessions.value(indexPath.value(0).toInt());
     if (indexPath.length() == 1) {
-        SessionWrapper* sw = new SessionWrapper(s->session());
-        return QVariant::fromValue(sw);
+        return QVariant::fromValue(s->session());
     } else {
         IrcBuffer* b = s->buffers().value(indexPath.value(1).toInt());
         BufferWrapper* bw = getWrapper(b);
@@ -162,18 +163,4 @@ void ChannelModel::notifyError(IrcNumericMessage* m) {
 void ChannelModel::notifyNotice(IrcNoticeMessage* m) {
     toast.setBody(m->message());
     toast.show();
-}
-
-void ChannelModel::notifyConnected(bool con) {
-    IrcSession* s = (IrcSession*)sender();
-    const int listSize = sessions.size();
-    for (int i = 0; i < listSize; ++i) {
-        IrcBufferModel* model = sessions.at(i);
-        if(model->session() == s) {
-            QVariantList indexPath = QVariantList();
-            indexPath.append(i);
-            emit itemUpdated(indexPath);
-            break;
-        }
-    }
 }
