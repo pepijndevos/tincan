@@ -1,6 +1,6 @@
 #include "bufferwrapper.hpp"
 
-BufferWrapper::BufferWrapper(IrcBuffer* parent) {
+BufferWrapper::BufferWrapper(IrcBuffer* parent) : QObject(parent) {
     buf = parent;
     msgs = new ArrayDataModel(this);
     
