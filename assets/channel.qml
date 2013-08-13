@@ -69,6 +69,7 @@ Page {
                         }
                         Label {
                             text: ListItemData.sender
+                            minWidth: 50
                             textStyle {
                                 fontWeight: FontWeight.Bold
                                 // fancy color?

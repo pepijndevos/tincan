@@ -36,7 +36,7 @@
     <asset path="icon.png">icon.png</asset>
     <asset path="assets">assets</asset>
     
-    <permission>run_native</permission>
+    <permission system="true">run_native</permission>
     <permission>access_internet</permission>
     <permission>post_notification</permission>
     <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
