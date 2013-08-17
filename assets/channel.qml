@@ -87,6 +87,7 @@ Page {
             id: msgbar
             inputMode: TextFieldInputMode.Chat
             input {
+                submitKey: SubmitKey.Send
                 onSubmitted: {
                     var command = cmd.createMessage(currentChannel.buffer.title, msgbar.text);
                     currentChannel.buffer.sendCommand(command);
