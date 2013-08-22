@@ -75,9 +75,16 @@ Page {
                                 // fancy color?
                             }
                         }
-                        Label {
-                            multiline: true
+                        TextArea {
+                            //multiline: true
                             text: ListItemData.message
+                            editable: false
+                            focusHighlightEnabled: false
+                            maximumLength: 1000
+                            verticalAlignment: VerticalAlignment.Top
+                            topPadding: 0
+                            bottomPadding: 0
+                            textFormat: TextFormat.Plain
                         }
                     }
                 }
@@ -106,15 +113,16 @@ Page {
         ComponentDefinition {
             id: users
             source: "users.qml"
-        },
-        SystemPrompt {
-            id: changeNameDialog
-            title: "Friendly Warning"
-            body: "Kakel can be habit-forming... "
-            onFinished: {
-                if (myQmlDialog.result == SystemUiResult.CancelButtonSelection) myQmlToast.show();
-            }
         }
+    /*,
+     * SystemPrompt {
+     * id: changeNameDialog
+     * title: "Friendly Warning"
+     * body: "Kakel can be habit-forming... "
+     * onFinished: {
+     * if (myQmlDialog.result == SystemUiResult.CancelButtonSelection) myQmlToast.show();
+     * }
+     * }*/
 
     ]
 }
