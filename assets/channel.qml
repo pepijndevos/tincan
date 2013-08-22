@@ -62,7 +62,7 @@ Page {
             listItemComponents: [
                 ListItemComponent {
                     type: "" //todo
-         
+                    
                     Container {
                         layout: StackLayout {
                             orientation: LayoutOrientation.LeftToRight
@@ -113,16 +113,19 @@ Page {
         ComponentDefinition {
             id: users
             source: "users.qml"
+        },
+        SystemPrompt {
+            id: changeNameDialog
+            title: "Change nickname"
+            body: "Enter your desired nickname"
+            inputField.defaultText: "old nick"
+            inputField.emptyText: "nickname"
+            onFinished: {
+                if(value == SystemUiResult.ConfirmButtonSelection){
+                    //save
+                }
+            }
         }
-    /*,
-     * SystemPrompt {
-     * id: changeNameDialog
-     * title: "Friendly Warning"
-     * body: "Kakel can be habit-forming... "
-     * onFinished: {
-     * if (myQmlDialog.result == SystemUiResult.CancelButtonSelection) myQmlToast.show();
-     * }
-     * }*/
-
+    
     ]
 }
