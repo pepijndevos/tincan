@@ -8,6 +8,7 @@ NavigationPane {
     property PasswordManager pwmgr: PasswordManager {}
     property BufferWrapper currentChannel: BufferWrapper { }
     property IrcSession currentNetwork: undefined
+    property variant lastSelectedItem
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {
             title: "Help & Feedback"
@@ -26,22 +27,22 @@ NavigationPane {
         }
         settingsAction: SettingsActionItem {}
         actions: [
-          ActionItem {
-            title: "Get a Bouncer"
-            imageSource: "asset:///icons/ic_to_bottom.png"
-            onTriggered: {
-                bouncer.trigger("bb.action.OPEN");
-            }
-            attachedObjects: [
-                Invocation {
-                    id: bouncer
-                    query {
-                        mimeType: "text/html"
-                        uri: "http://teamrelaychat.nl/bouncer/"
-                    }
+            ActionItem {
+                title: "Get a Bouncer"
+                imageSource: "asset:///icons/ic_to_bottom.png"
+                onTriggered: {
+                    bouncer.trigger("bb.action.OPEN");
                 }
-            ]
-          }
+                attachedObjects: [
+                    Invocation {
+                        id: bouncer
+                        query {
+                            mimeType: "text/html"
+                            uri: "http://teamrelaychat.nl/bouncer/"
+                        }
+                    }
+                ]
+            }
         ]
     }
     Page {
@@ -59,7 +60,7 @@ NavigationPane {
             layout: DockLayout {}
             ListView {
                 property alias cmd: root.cmd
-
+                
                 id: channelList
                 dataModel: ChannelModel { id: chanmod }
                 verticalAlignment: VerticalAlignment.Top
@@ -67,7 +68,7 @@ NavigationPane {
                 listItemComponents: [
                     ListItemComponent {
                         type: "network"
-                         
+                        
                         Container {
                             id: itemRoot
                             Container {
@@ -105,6 +106,14 @@ NavigationPane {
                                             s.open();
                                         }
                                     }
+                                    ActionItem {
+                                        title: "Disconnect"
+                                        imageSource: "asset:///icons/ic_rotate.png"
+                                        onTriggered: {
+                                            var s = ListItemData;
+                                            s.close();
+                                        }
+                                    }
                                     DeleteActionItem {
                                         title: "Delete Network"
                                         onTriggered: {
@@ -117,11 +126,11 @@ NavigationPane {
                     },
                     ListItemComponent {
                         type: "channel"
-                          
+                        
                         StandardListItem {
                             title: ListItemData.title
                             status: ListItemData.unread ? ListItemData.unread : ""
-                            id: itemRoot
+                            id: itemRoot2
                             contextActions: [
                                 ActionSet {
                                     DeleteActionItem {
@@ -129,9 +138,9 @@ NavigationPane {
                                         onTriggered: {
                                             console.log(JSON.stringify(ListItemData));
                                             if(ListItemData.buffer.channel) {
-                                              ListItemData.buffer.part("");
+                                                ListItemData.buffer.part("");
                                             } else {
-                                              ListItemData.buffer.model.remove(ListItemData.title);
+                                                ListItemData.buffer.model.remove(ListItemData.title);
                                             }
                                         }
                                     }
@@ -142,14 +151,20 @@ NavigationPane {
                 ] // end of listItemComponents list
                 onTriggered: {
                     var selectedItem = dataModel.data(indexPath);
-                    console.log(JSON.stringify(selectedItem), JSON.stringify(indexPath));
+                    lastSelectedItem = selectedItem;
+                    //console.log(JSON.stringify(selectedItem), JSON.stringify(indexPath));
                     if(indexPath.length == 1) { //header
-                      currentNetwork = selectedItem;
-                      joinDialog.show();
+                        currentNetwork = selectedItem;
+                        if(selectedItem.connected){
+                            joinDialog.show();
+                        }else{
+                            //console.log("should show reconnect dialog");
+                            reconnectDialog.show();
+                        }
                     } else { //item
-                      currentChannel = selectedItem;
-                      var newPage = channel.createObject();
-                      root.push(newPage);
+                        currentChannel = selectedItem;
+                        var newPage = channel.createObject();
+                        root.push(newPage);
                     }
                 }
             }
@@ -166,11 +181,36 @@ NavigationPane {
             body: "Enter channel name"
             inputField.defaultText: "#"
             onFinished: {
-                var roomname = joinDialog.inputFieldTextEntry();
-                console.log(roomname);
-                if(roomname !== "") {
-                  var command = cmd.createJoin(roomname);
-                  currentNetwork.sendCommand(command);
+                if(value == SystemUiResult.ConfirmButtonSelection){
+                    var roomname = joinDialog.inputFieldTextEntry();
+                    console.log(roomname);
+                    if(roomname !== "") {
+                        var command = cmd.createJoin(roomname);
+                        currentNetwork.sendCommand(command);
+                    }
+                }else{
+                    //console.log("cancel join channel");
+                }
+            }
+            returnKeyAction: SystemUiReturnKeyAction.Join
+        },
+        SystemDialog {
+            id: reconnectDialog
+            title: "Server disconnected"
+            body: "Do you want to reconnect?"
+            onFinished: {
+                if(value == SystemUiResult.ConfirmButtonSelection){
+                    /*var roomname = joinDialog.inputFieldTextEntry();
+                    console.log(roomname);
+                    if(roomname !== "") {
+                        var command = cmd.createJoin(roomname);
+                        currentNetwork.sendCommand(command);
+                    }*/
+                    lastSelectedItem.close();
+                    lastSelectedItem.open();
+                    //joinDialog.show();
+                }else{
+                    console.log("cancel join channel");
                 }
             }
         },
@@ -216,27 +256,27 @@ NavigationPane {
                     Button {
                         text: "Connect"
                         onClicked: {
-                          var host = server.text || server.hintText;
-                          var name = nick.text || "tincan";
-
-                          var session = chanmod.addSession();
-                          session.host = host;
-                          session.port = parseInt(port.text || port.hintText);
-                          session.secure = ssl.checked;
-                          session.userName = nick.text || "tincan";
-                          session.nickName = nick.text || "tincan";
-                          session.realName = "TinCan User";
-                          session.open();
-                          pwmgr.addSession(session, password.text);
-                          chanmod.saveSession(session, password.text);
-
-                          networkDialog.close()
+                            var host = server.text || server.hintText;
+                            var name = nick.text || "tincan";
+                            
+                            var session = chanmod.addSession();
+                            session.host = host;
+                            session.port = parseInt(port.text || port.hintText);
+                            session.secure = ssl.checked;
+                            session.userName = nick.text || "tincan";
+                            session.nickName = nick.text || "tincan";
+                            session.realName = "TinCan User";
+                            session.open();
+                            pwmgr.addSession(session, password.text);
+                            chanmod.saveSession(session, password.text);
+                            
+                            networkDialog.close()
                         }
                     }
                     Button {
                         text: "Cancel"
                         onClicked: {
-                          networkDialog.close()
+                            networkDialog.close()
                         }
                     }
                 }
