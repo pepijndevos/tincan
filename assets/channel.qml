@@ -9,8 +9,10 @@ Page {
         kind: TitleBarKind.FreeForm
         kindProperties: FreeFormTitleBarKindProperties {
             Container {
-                topPadding: 20
-                leftPadding: 10
+                leftPadding: padding.leftPadding
+                layout: DockLayout {
+
+                }
                 Label {
                     id: chanTitle
                     verticalAlignment: VerticalAlignment.Center
