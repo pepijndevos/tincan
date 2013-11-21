@@ -281,6 +281,9 @@ NavigationPane {
                     }
                 }
             }
+        },
+        Padding {
+            id: padding
         }
     ] // end of attachedObjects list
 }
