@@ -37,6 +37,7 @@ Page {
         // define the actions for first tab here
         ActionItem {
             title: qsTr("Users")
+            enabled: root.currentChannel.buffer.channel
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
                 //open users
