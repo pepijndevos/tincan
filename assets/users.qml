@@ -42,6 +42,7 @@ Page {
                 } // end of ListItemComponent
             ] // end of listItemComponents list
             onTriggered: {
+                root.previousChannel = root.currentChannel;
                 var selectedItem = dataModel.data(indexPath);
                 var buf = currentChannel.buffer.model.add(selectedItem.name);
                 var wr = chanmod.getWrapper(buf);

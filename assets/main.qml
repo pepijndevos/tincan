@@ -7,8 +7,15 @@ NavigationPane {
     property IrcCommand cmd: IrcCommand {}
     property PasswordManager pwmgr: PasswordManager {}
     property BufferWrapper currentChannel: BufferWrapper { }
+    property BufferWrapper previousChannel: undefined
     property IrcSession currentNetwork: undefined
     property variant lastSelectedItem
+    onPopTransitionEnded: {
+        if(previousChannel != undefined){
+            currentChannel = previousChannel;
+            previousChannel = undefined
+        }
+    }
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {
             title: "Help & Feedback"
