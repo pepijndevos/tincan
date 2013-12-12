@@ -41,6 +41,31 @@ void BufferWrapper::addMessage(IrcMessage* msg) {
             map["sender"] = ((IrcPrivateMessage*)msg)->sender().name();
             msgs->append(map);
             break;
+        case IrcMessage::Join:
+            map["message"] = "joined " + ((IrcJoinMessage*)msg)->channel();
+            map["sender"] = ((IrcJoinMessage*)msg)->sender().name();
+            msgs->append(map);
+            break;
+        case IrcMessage::Part:
+            map["message"] = "left " + ((IrcPartMessage*)msg)->channel();
+            map["sender"] = ((IrcPartMessage*)msg)->sender().name();
+            msgs->append(map);
+            break;
+        case IrcMessage::Kick:
+            map["message"] = "kicked " + ((IrcKickMessage*)msg)->user() + " from " + ((IrcKickMessage*)msg)->channel() + " for: " + ((IrcKickMessage*)msg)->reason();
+            map["sender"] = ((IrcKickMessage*)msg)->sender().name();
+            msgs->append(map);
+            break;
+        case IrcMessage::Quit:
+            map["message"] = "quit";
+            map["sender"] = ((IrcQuitMessage*)msg)->sender().name();
+            msgs->append(map);
+            break;
+        case IrcMessage::Nick:
+            map["message"] = "is now called " + ((IrcNickMessage*)msg)->nick();
+            map["sender"] = ((IrcNickMessage*)msg)->sender().name();
+            msgs->append(map);
+            break;
         default:
             break;
     }
