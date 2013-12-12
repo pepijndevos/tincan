@@ -183,7 +183,9 @@ NavigationPane {
                             reconnectDialog.show();
                         }
                     } else { //item
-                        currentChannel.active=false;
+                        if(currentChannel!=null){
+	                        currentChannel.active=false;
+	                    }
                         currentChannel = selectedItem;
                         currentChannel.active=true;
                         var newPage = channel.createObject();
