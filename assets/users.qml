@@ -46,8 +46,9 @@ Page {
                 var selectedItem = dataModel.data(indexPath);
                 var buf = currentChannel.buffer.model.add(selectedItem.name);
                 var wr = chanmod.getWrapper(buf);
-
+                currentChannel.active=false;
                 currentChannel = wr;
+                currentChannel.active=true;
                 var newPage = channel.createObject();
                 root.push(newPage);
             }

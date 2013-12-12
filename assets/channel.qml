@@ -3,6 +3,7 @@ import bb.system 1.0
 
 Page {
     id: channelpage
+    property string uid: "channelpage"
     titleBar: TitleBar {
         id: channeltitle
         scrollBehavior: TitleBarScrollBehavior.Sticky

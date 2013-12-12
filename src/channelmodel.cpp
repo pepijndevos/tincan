@@ -7,7 +7,6 @@ ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) {
 
 IrcSession* ChannelModel::addSession() {
     IrcSession* session = new IrcSession();
-    connect(session, SIGNAL(privateMessageReceived(IrcPrivateMessage*)), this, SLOT(notifyMention(IrcPrivateMessage*)));
     connect(session, SIGNAL(numericMessageReceived(IrcNumericMessage*)), this, SLOT(notifyError(IrcNumericMessage*)));
     connect(session, SIGNAL(noticeMessageReceived(IrcNoticeMessage*)), this, SLOT(notifyNotice(IrcNoticeMessage*)));
 
@@ -138,18 +137,6 @@ QVariant ChannelModel::data(const QVariantList &indexPath) {
         IrcBuffer* b = s->buffers().value(indexPath.value(1).toInt());
         BufferWrapper* bw = getWrapper(b);
         return QVariant::fromValue(bw);
-    }
-}
-
-void ChannelModel::notifyMention(IrcPrivateMessage* m) {
-    if(m->message().contains(m->session()->nickName())) {
-        //TODO only send notifications for backgrounded channels
-        bb::platform::Notification* pNotification = new bb::platform::Notification();
- 
-        pNotification->setTitle(m->sender().name());
-        pNotification->setBody(m->message());
-         
-        pNotification->notify();
     }
 }
 

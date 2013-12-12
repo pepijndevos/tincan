@@ -3,6 +3,7 @@
 BufferWrapper::BufferWrapper(IrcBuffer* parent) : QObject(parent) {
     buf = parent;
     unread = 0;
+    active = false;
     msgs = new ArrayDataModel(this);
     
     connect(buf, SIGNAL(messageReceived(IrcMessage*)), this, SLOT(addMessage(IrcMessage*)));
@@ -30,13 +31,30 @@ int BufferWrapper::getUnread() {
     return unread;
 }
 
+bool BufferWrapper::getActive() {
+    return active;
+}
+
+void BufferWrapper::setActive(bool sactive){
+    active = sactive;
+}
+
 void BufferWrapper::addMessage(IrcMessage* msg) {
     QVariantMap map;
     switch(msg->type()) {
         case IrcMessage::Private:
-            unread++;
-            emit unreadChanged();
-
+            if(!active) {
+                unread++;
+                emit unreadChanged();
+                if(((IrcPrivateMessage*)msg)->message().contains(((IrcPrivateMessage*)msg)->session()->nickName())) {
+                    bb::platform::Notification* pNotification = new bb::platform::Notification();
+             
+                    pNotification->setTitle(((IrcPrivateMessage*)msg)->sender().name());
+                    pNotification->setBody(((IrcPrivateMessage*)msg)->message());
+                     
+                    pNotification->notify();
+                }
+            }
             map["message"] = ((IrcPrivateMessage*)msg)->message();
             map["sender"] = ((IrcPrivateMessage*)msg)->sender().name();
             msgs->append(map);

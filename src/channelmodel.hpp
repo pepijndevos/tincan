@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <bb/cascades/GroupDataModel>
-#include <bb/platform/Notification>
 #include <bb/system/SystemToast>
 #include <IrcSession>
 #include <IrcBufferModel>
@@ -32,7 +31,6 @@ public:
 public slots:
     void bufferAdded(IrcBuffer* buf);
     void bufferRemoved(IrcBuffer* buf);
-    void notifyMention(IrcPrivateMessage* message);
     void notifyError(IrcNumericMessage* message);
     void notifyNotice(IrcNoticeMessage* message);
 signals:

@@ -8,6 +8,7 @@
 
 #include <bb/cascades/ArrayDataModel>
 #include <bb/cascades/ListView>
+#include <bb/platform/Notification>
 
 
 using namespace bb::cascades;
@@ -20,7 +21,8 @@ class BufferWrapper : public QObject
     Q_PROPERTY(IrcBuffer* buffer READ getBuffer)
     Q_PROPERTY(ArrayDataModel* messages READ getMessages)
     Q_PROPERTY(int unread READ getUnread NOTIFY unreadChanged)
-        
+    Q_PROPERTY(bool active READ getActive WRITE setActive)
+
 public:
     BufferWrapper(IrcBuffer* parent=0);
     ~BufferWrapper() {}
@@ -29,6 +31,8 @@ public:
     IrcBuffer* getBuffer();
     ArrayDataModel* getMessages();
     int getUnread();
+    bool getActive();
+    void setActive(bool);
 
 public slots:
     void addMessage(IrcMessage* msg);
@@ -42,6 +46,7 @@ private:
     IrcBuffer* buf;
     ArrayDataModel* msgs;
     int unread;
+    bool active;
 
 };
 

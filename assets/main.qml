@@ -11,9 +11,14 @@ NavigationPane {
     property IrcSession currentNetwork: undefined
     property variant lastSelectedItem
     onPopTransitionEnded: {
+        if(page.uid == "channelpage") {
+            console.log("AAAAAAAAA");
+            currentChannel.active=false;
+        }
         if(previousChannel != undefined){
+            currentChannel.active=false;
             currentChannel = previousChannel;
-            previousChannel = undefined
+            currentChannel.active=true;
         }
     }
     Menu.definition: MenuDefinition {
@@ -177,7 +182,9 @@ NavigationPane {
                             reconnectDialog.show();
                         }
                     } else { //item
+                        currentChannel.active=false;
                         currentChannel = selectedItem;
+                        currentChannel.active=true;
                         var newPage = channel.createObject();
                         root.push(newPage);
                     }
