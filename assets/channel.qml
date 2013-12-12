@@ -24,6 +24,7 @@ Page {
                 }
             }
             expandableArea {
+                indicatorVisibility: (chanTopic.text!="")? 1:2;
                 content: Label {
                     id: chanTopic
                     multiline: true
