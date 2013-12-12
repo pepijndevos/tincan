@@ -111,7 +111,7 @@ NavigationPane {
                                         },
                                         ActionItem {
                                             title: "Disconnect"
-                                            imageSource: "asset:///icons/ic_rotate.png"
+                                            imageSource: "asset:///icons/ic_clear.png"
                                             onTriggered: {
                                                 var s = ListItemData;
                                                 s.close();
