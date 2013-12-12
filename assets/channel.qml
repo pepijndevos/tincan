@@ -121,11 +121,11 @@ Page {
             id: changeNameDialog
             title: "Change nickname"
             body: "Enter your desired nickname"
-            inputField.defaultText: "old nick"
+            inputField.defaultText: root.currentNetwork.nickName
             inputField.emptyText: "nickname"
             onFinished: {
                 if(value == SystemUiResult.ConfirmButtonSelection){
-                    //save
+                    root.currentNetwork.nickName = changeNameDialog.inputFieldTextEntry()
                 }
             }
         }

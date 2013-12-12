@@ -25,7 +25,7 @@ NavigationPane {
                 }
             ]
         }
-        settingsAction: SettingsActionItem {}
+        //settingsAction: SettingsActionItem {}
         actions: [
             ActionItem {
                 title: "Get a Bouncer"
