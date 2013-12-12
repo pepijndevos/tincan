@@ -92,34 +92,38 @@ NavigationPane {
                             Container {
                                 id: statusBorder
                                 horizontalAlignment: HorizontalAlignment.Fill
-                                minHeight: 5
+                                minHeight: 4
                                 background: ListItemData.connected ? Color.Green : Color.Red
                             }
                             contextActions: [
                                 ActionSet {
-                                    ActionItem {
-                                        title: "Reconnect"
-                                        imageSource: "asset:///icons/ic_rotate.png"
-                                        onTriggered: {
-                                            var s = ListItemData;
-                                            s.close();
-                                            s.open();
+                                    title: ListItemData.host
+                                    subtitle: ListItemData.userName
+                                    actions:[
+                                        ActionItem {
+                                            title: "Reconnect"
+                                            imageSource: "asset:///icons/ic_rotate.png"
+                                            onTriggered: {
+                                                var s = ListItemData;
+                                                s.close();
+                                                s.open();
+                                            }
+                                        },
+                                        ActionItem {
+                                            title: "Disconnect"
+                                            imageSource: "asset:///icons/ic_rotate.png"
+                                            onTriggered: {
+                                                var s = ListItemData;
+                                                s.close();
+                                            }
+                                        },
+                                        DeleteActionItem {
+                                            title: "Delete Network"
+                                            onTriggered: {
+                                                itemRoot.ListItem.view.dataModel.removeSession(ListItemData);
+                                            }
                                         }
-                                    }
-                                    ActionItem {
-                                        title: "Disconnect"
-                                        imageSource: "asset:///icons/ic_rotate.png"
-                                        onTriggered: {
-                                            var s = ListItemData;
-                                            s.close();
-                                        }
-                                    }
-                                    DeleteActionItem {
-                                        title: "Delete Network"
-                                        onTriggered: {
-                                            itemRoot.ListItem.view.dataModel.removeSession(ListItemData);
-                                        }
-                                    }
+                                    ]
                                 }
                             ]
                         }
@@ -133,17 +137,21 @@ NavigationPane {
                             id: itemRoot2
                             contextActions: [
                                 ActionSet {
-                                    DeleteActionItem {
-                                        title: "Leave channel"
-                                        onTriggered: {
-                                            console.log(JSON.stringify(ListItemData));
-                                            if(ListItemData.buffer.channel) {
-                                                ListItemData.buffer.part("");
-                                            } else {
-                                                ListItemData.buffer.model.remove(ListItemData.title);
+                                    title: ListItemData.title
+                                    subtitle: ListItemData.unread ? ListItemData.unread +" unread messages" : ""
+                                    actions:[
+                                        DeleteActionItem {
+                                            title: "Leave channel"
+                                            onTriggered: {
+                                                console.log(JSON.stringify(ListItemData));
+                                                if(ListItemData.buffer.channel) {
+                                                    ListItemData.buffer.part("");
+                                                } else {
+                                                    ListItemData.buffer.model.remove(ListItemData.title);
+                                                }
                                             }
                                         }
-                                    }
+                                    ]
                                 }
                             ]
                         }
