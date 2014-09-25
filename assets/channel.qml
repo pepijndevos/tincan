@@ -74,9 +74,13 @@ Page {
                         }
                         Label {
                             text: ListItemData.sender
-                            minWidth: 50
+                            minWidth: 200
+                            maxWidth: 200
+                            rightMargin: 0
+                            rightPadding: 0
                             textStyle {
                                 fontWeight: FontWeight.Bold
+                                color: (ListItemData.msgtype != "private") ? Color.Gray : Color.Black
                                 // fancy color?
                             }
                         }
@@ -89,7 +93,12 @@ Page {
                             verticalAlignment: VerticalAlignment.Top
                             topPadding: 0
                             bottomPadding: 0
+                            leftPadding: 0
+                            leftMargin: 0
                             textFormat: TextFormat.Plain
+                            textStyle {
+                                color: (ListItemData.msgtype != "private") ? Color.Gray : Color.Black
+                            }
                         }
                     }
                 }

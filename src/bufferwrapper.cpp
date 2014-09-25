@@ -57,31 +57,43 @@ void BufferWrapper::addMessage(IrcMessage* msg) {
             }
             map["message"] = ((IrcPrivateMessage*)msg)->content();
             map["sender"] = ((IrcPrivateMessage*)msg)->nick();
+            map["msgtype"] = "private";
             msgs->append(map);
             break;
         case IrcMessage::Join:
             map["message"] = "joined " + ((IrcJoinMessage*)msg)->channel();
             map["sender"] = ((IrcJoinMessage*)msg)->nick();
+            map["msgtype"] = "join";
             msgs->append(map);
             break;
         case IrcMessage::Part:
             map["message"] = "left " + ((IrcPartMessage*)msg)->channel();
             map["sender"] = ((IrcPartMessage*)msg)->nick();
+            map["msgtype"] = "part";
             msgs->append(map);
             break;
         case IrcMessage::Kick:
             map["message"] = "kicked " + ((IrcKickMessage*)msg)->user() + " from " + ((IrcKickMessage*)msg)->channel() + " for: " + ((IrcKickMessage*)msg)->reason();
             map["sender"] = ((IrcKickMessage*)msg)->nick();
+            map["msgtype"] = "kick";
             msgs->append(map);
             break;
         case IrcMessage::Quit:
             map["message"] = "quit";
             map["sender"] = ((IrcQuitMessage*)msg)->nick();
+            map["msgtype"] = "quit";
             msgs->append(map);
             break;
         case IrcMessage::Nick:
             map["message"] = "is now called " + ((IrcNickMessage*)msg)->newNick();
             map["sender"] = ((IrcNickMessage*)msg)->oldNick();
+            map["msgtype"] = "nick";
+            msgs->append(map);
+            break;
+        case IrcMessage::Topic:
+            map["message"] = "set topic to " + ((IrcTopicMessage*)msg)->topic();
+            map["sender"] = ((IrcTopicMessage*)msg)->nick();
+            map["msgtype"] = "nick";
             msgs->append(map);
             break;
         default:
