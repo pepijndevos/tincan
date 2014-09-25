@@ -10,7 +10,7 @@
 #include "usermodel.hpp"
 #include "bufferwrapper.hpp"
 
-#include <IrcSession>
+#include <IrcConnection>
 #include <IrcCommand>
 #include <IrcMessage>
 
@@ -26,7 +26,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     QCoreApplication::setOrganizationDomain("wishfulcoding.nl");
     QCoreApplication::setApplicationName("TinCan");
 
-    qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
+    qmlRegisterType<IrcConnection>("Communi", 1, 0, "IrcConnection");
     qmlRegisterType<PasswordManager>("Communi", 1, 0, "PasswordManager");
     qmlRegisterType<IrcBuffer>("Communi", 1, 0, "IrcBuffer");
     qmlRegisterType<BufferWrapper>("Communi", 1, 0, "BufferWrapper");

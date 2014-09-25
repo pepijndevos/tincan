@@ -5,8 +5,8 @@ ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) {
     loadSessions();
 }
 
-IrcSession* ChannelModel::addSession() {
-    IrcSession* session = new IrcSession();
+IrcConnection* ChannelModel::addSession() {
+    IrcConnection* session = new IrcConnection();
     connect(session, SIGNAL(numericMessageReceived(IrcNumericMessage*)), this, SLOT(notifyError(IrcNumericMessage*)));
     connect(session, SIGNAL(noticeMessageReceived(IrcNoticeMessage*)), this, SLOT(notifyNotice(IrcNoticeMessage*)));
 
@@ -22,13 +22,13 @@ IrcSession* ChannelModel::addSession() {
     return session;
 }
 
-void ChannelModel::removeSession(IrcSession* s) {
+void ChannelModel::removeSession(IrcConnection* s) {
     s->quit("Goodbye from TinCan");
     s->close(); //bad?
     const int listSize = sessions.size();
     for (int i = 0; i < listSize; ++i) {
         IrcBufferModel* model = sessions.at(i);
-        if(model->session() == s) {
+        if(model->connection() == s) {
             sessions.removeAt(i);
 
             QSettings settings;
@@ -44,11 +44,11 @@ void ChannelModel::removeSession(IrcSession* s) {
     }
 }
 
-void ChannelModel::saveSession(IrcSession* session, QString pwd) {
+void ChannelModel::saveSession(IrcConnection* session, QString pwd) {
     QSettings settings;
 
     qDebug() << settings.fileName();
-    
+
     settings.beginGroup(session->host() + ":" + session->userName());
     settings.setValue("host", session->host());
     settings.setValue("port", session->port());
@@ -62,7 +62,7 @@ void ChannelModel::loadSessions() {
     QSettings settings;
     foreach(QString network, settings.childGroups()) {
         qDebug() << network;
-        IrcSession* s = addSession();
+        IrcConnection* s = addSession();
 
         settings.beginGroup(network);
         s->setHost(settings.value("host").toString());
@@ -74,7 +74,7 @@ void ChannelModel::loadSessions() {
         QString pwd = settings.value("password").toString();
         new PasswordManager(s, pwd);
         settings.endGroup();
-        
+
         s->open();
     }
 }
@@ -132,7 +132,7 @@ BufferWrapper* ChannelModel::getWrapper(IrcBuffer* buf) {
 QVariant ChannelModel::data(const QVariantList &indexPath) {
     IrcBufferModel* s = sessions.value(indexPath.value(0).toInt());
     if (indexPath.length() == 1) {
-        return QVariant::fromValue(s->session());
+        return QVariant::fromValue(s->connection());
     } else {
         IrcBuffer* b = s->buffers().value(indexPath.value(1).toInt());
         BufferWrapper* bw = getWrapper(b);
@@ -141,13 +141,13 @@ QVariant ChannelModel::data(const QVariantList &indexPath) {
 }
 
 void ChannelModel::notifyError(IrcNumericMessage* m) {
-    if (QByteArray(Irc::toString(m->code())).startsWith("ERR_")) {
+    if (Irc::codeToString(m->code()).startsWith("ERR_")) {
         toast.setBody("ERROR: " + m->parameters().last());
         toast.show();
     }
 }
 
 void ChannelModel::notifyNotice(IrcNoticeMessage* m) {
-    toast.setBody(m->message());
+    toast.setBody(m->content());
     toast.show();
 }

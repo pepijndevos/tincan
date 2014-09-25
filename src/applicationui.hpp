@@ -3,7 +3,7 @@
 #define ApplicationUI_HPP_
 
 #include <QObject>
-#include <IrcSession>
+#include <IrcConnection>
 
 namespace bb { namespace cascades { class Application; }}
 

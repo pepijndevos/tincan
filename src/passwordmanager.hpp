@@ -2,7 +2,7 @@
 #define PasswordManager_HPP_
 
 #include <QObject>
-#include <IrcSession>
+#include <IrcConnection>
 
 // this class creates instances of itself and provides passwords
 
@@ -12,8 +12,8 @@ class PasswordManager : public QObject
         
 public:
     PasswordManager(QObject* parent=0) : QObject(parent)  {}
-    PasswordManager(IrcSession* parent, QString password);
-    Q_INVOKABLE void addSession(IrcSession* session, QString password);
+    PasswordManager(IrcConnection* parent, QString password);
+    Q_INVOKABLE void addSession(IrcConnection* session, QString password);
 
 public slots:
     void setPassword(QString* password);

@@ -4,7 +4,7 @@
 #include <QObject>
 #include <bb/cascades/GroupDataModel>
 #include <bb/system/SystemToast>
-#include <IrcSession>
+#include <IrcConnection>
 #include <IrcBufferModel>
 #include <IrcBuffer>
 #include "bufferwrapper.hpp"
@@ -24,9 +24,9 @@ public:
     QString itemType(const QVariantList &indexPath);
     QVariant data(const QVariantList &indexPath);
     Q_INVOKABLE BufferWrapper* getWrapper(IrcBuffer*);
-    Q_INVOKABLE IrcSession* addSession();
-    Q_INVOKABLE void removeSession(IrcSession*);
-    Q_INVOKABLE void saveSession(IrcSession*, QString password);
+    Q_INVOKABLE IrcConnection* addSession();
+    Q_INVOKABLE void removeSession(IrcConnection*);
+    Q_INVOKABLE void saveSession(IrcConnection*, QString password);
 
 public slots:
     void bufferAdded(IrcBuffer* buf);
@@ -45,6 +45,6 @@ private:
     void loadSessions();
 };
 
-Q_DECLARE_METATYPE( IrcSession* )
+//Q_DECLARE_METATYPE( IrcConnection* )
 
 #endif /* ChannelModel_HPP_ */

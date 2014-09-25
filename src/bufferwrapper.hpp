@@ -2,9 +2,10 @@
 #define BufferWrapper_HPP_
 
 #include <QObject>
+#include <IrcCommand>
 #include <IrcBuffer>
 #include <IrcBufferModel>
-#include <IrcSession>
+#include <IrcConnection>
 
 #include <bb/cascades/ArrayDataModel>
 #include <bb/cascades/ListView>

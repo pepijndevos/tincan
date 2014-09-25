@@ -8,7 +8,7 @@ NavigationPane {
     property PasswordManager pwmgr: PasswordManager {}
     property BufferWrapper currentChannel: BufferWrapper { }
     property BufferWrapper previousChannel: undefined
-    property IrcSession currentNetwork: undefined
+    property IrcConnection currentNetwork: undefined
     property variant lastSelectedItem
     onPopTransitionEnded: {
         if(page.uid == "channelpage") {

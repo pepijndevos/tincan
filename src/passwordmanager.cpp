@@ -1,11 +1,11 @@
 #include "passwordmanager.hpp"
 
-PasswordManager::PasswordManager(IrcSession* parent, QString pwd) {
+PasswordManager::PasswordManager(IrcConnection* parent, QString pwd) {
     password = pwd;
     connect(parent, SIGNAL(password(QString*)), this, SLOT(setPassword(QString*)));
 }
 
-void PasswordManager::addSession(IrcSession* session, QString pwd) {
+void PasswordManager::addSession(IrcConnection* session, QString pwd) {
     new PasswordManager(session, pwd);
 }
 

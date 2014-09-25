@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <bb/cascades/GroupDataModel>
-#include <IrcSession>
+#include <IrcConnection>
 #include <IrcUserModel>
 #include <IrcUser>
 #include "bufferwrapper.hpp"

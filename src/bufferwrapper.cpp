@@ -5,7 +5,7 @@ BufferWrapper::BufferWrapper(IrcBuffer* parent) : QObject(parent) {
     unread = 0;
     active = false;
     msgs = new ArrayDataModel(this);
-    
+
     connect(buf, SIGNAL(messageReceived(IrcMessage*)), this, SLOT(addMessage(IrcMessage*)));
 }
 
@@ -14,8 +14,8 @@ QString BufferWrapper::getTitle() {
 }
 
 QString BufferWrapper::getNetwork() {
-    QString host = buf->model()->session()->host();
-    QString user = buf->model()->session()->userName();
+    QString host = buf->model()->connection()->host();
+    QString user = buf->model()->connection()->userName();
     return host + ":" + user;
 }
 
@@ -46,42 +46,42 @@ void BufferWrapper::addMessage(IrcMessage* msg) {
             if(!active) {
                 unread++;
                 emit unreadChanged();
-                if(((IrcPrivateMessage*)msg)->message().contains(((IrcPrivateMessage*)msg)->session()->nickName())) {
+                if(((IrcPrivateMessage*)msg)->content().contains(((IrcPrivateMessage*)msg)->connection()->nickName())) {
                     bb::platform::Notification* pNotification = new bb::platform::Notification();
-             
-                    pNotification->setTitle(((IrcPrivateMessage*)msg)->sender().name());
-                    pNotification->setBody(((IrcPrivateMessage*)msg)->message());
-                     
+
+                    pNotification->setTitle(((IrcPrivateMessage*)msg)->nick());
+                    pNotification->setBody(((IrcPrivateMessage*)msg)->content());
+
                     pNotification->notify();
                 }
             }
-            map["message"] = ((IrcPrivateMessage*)msg)->message();
-            map["sender"] = ((IrcPrivateMessage*)msg)->sender().name();
+            map["message"] = ((IrcPrivateMessage*)msg)->content();
+            map["sender"] = ((IrcPrivateMessage*)msg)->nick();
             msgs->append(map);
             break;
         case IrcMessage::Join:
             map["message"] = "joined " + ((IrcJoinMessage*)msg)->channel();
-            map["sender"] = ((IrcJoinMessage*)msg)->sender().name();
+            map["sender"] = ((IrcJoinMessage*)msg)->nick();
             msgs->append(map);
             break;
         case IrcMessage::Part:
             map["message"] = "left " + ((IrcPartMessage*)msg)->channel();
-            map["sender"] = ((IrcPartMessage*)msg)->sender().name();
+            map["sender"] = ((IrcPartMessage*)msg)->nick();
             msgs->append(map);
             break;
         case IrcMessage::Kick:
             map["message"] = "kicked " + ((IrcKickMessage*)msg)->user() + " from " + ((IrcKickMessage*)msg)->channel() + " for: " + ((IrcKickMessage*)msg)->reason();
-            map["sender"] = ((IrcKickMessage*)msg)->sender().name();
+            map["sender"] = ((IrcKickMessage*)msg)->nick();
             msgs->append(map);
             break;
         case IrcMessage::Quit:
             map["message"] = "quit";
-            map["sender"] = ((IrcQuitMessage*)msg)->sender().name();
+            map["sender"] = ((IrcQuitMessage*)msg)->nick();
             msgs->append(map);
             break;
         case IrcMessage::Nick:
-            map["message"] = "is now called " + ((IrcNickMessage*)msg)->nick();
-            map["sender"] = ((IrcNickMessage*)msg)->sender().name();
+            map["message"] = "is now called " + ((IrcNickMessage*)msg)->newNick();
+            map["sender"] = ((IrcNickMessage*)msg)->oldNick();
             msgs->append(map);
             break;
         default:
@@ -90,9 +90,11 @@ void BufferWrapper::addMessage(IrcMessage* msg) {
 }
 
 void BufferWrapper::addMessage(IrcCommand* cmd) {
-    IrcSession* session = buf->session();
-    QString sender = session->nickName();
-    addMessage(IrcMessage::fromCommand(sender, cmd, session));
+    IrcConnection* connection = buf->connection();
+    QString sender = connection->nickName();
+    //addMessage(IrcCommand::toMessage(sender, cmd, connection));
+	IrcMessage* message = cmd->toMessage(sender,connection);
+	addMessage(message);
 }
 
 void BufferWrapper::showChannel(QObject* chan){
