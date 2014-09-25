@@ -104,17 +104,22 @@ Page {
                 }
             ]
         }
-        TextField {
-            id: msgbar
-            inputMode: TextFieldInputMode.Chat
-            input {
-                submitKey: SubmitKey.Send
-                onSubmitted: {
-                    if (msgbar.text) {
-                        var command = cmd.createMessage(currentChannel.buffer.title, msgbar.text);
-                        currentChannel.buffer.sendCommand(command);
-                        currentChannel.addMessage(command);
-                        msgbar.text = "";
+        Container {
+            bottomPadding: 10
+            leftPadding: 10
+            rightPadding: 10
+            TextField {
+                id: msgbar
+                inputMode: TextFieldInputMode.Chat
+                input {
+                    submitKey: SubmitKey.Send
+                    onSubmitted: {
+                        if (msgbar.text) {
+                            var command = cmd.createMessage(currentChannel.buffer.title, msgbar.text);
+                            currentChannel.buffer.sendCommand(command);
+                            currentChannel.addMessage(command);
+                            msgbar.text = "";
+                        }
                     }
                 }
             }

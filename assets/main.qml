@@ -71,11 +71,24 @@ NavigationPane {
         ]
         Container {
             layout: DockLayout {}
+            Container {
+                verticalAlignment: VerticalAlignment.Center
+                horizontalAlignment: HorizontalAlignment.Fill
+                visible: chanmod.empty
+                Label {
+                    textStyle.base: SystemDefaults.TextStyles.BigText  
+                    textStyle.textAlign: TextAlign.Center
+                    horizontalAlignment: HorizontalAlignment.Center
+                    text: "Add a network to get started"
+                    multiline: true
+                }
+            }
             ListView {
                 property alias cmd: root.cmd
-                
+
                 id: channelList
                 dataModel: ChannelModel { id: chanmod }
+                
                 verticalAlignment: VerticalAlignment.Top
                 horizontalAlignment: HorizontalAlignment.Fill
                 listItemComponents: [

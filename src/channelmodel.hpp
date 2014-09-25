@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE IrcConnection* addSession();
     Q_INVOKABLE void removeSession(IrcConnection*);
     Q_INVOKABLE void saveSession(IrcConnection*, QString password);
+    Q_PROPERTY(bool empty READ isEmpty NOTIFY itemAdded)
 
 public slots:
     void bufferAdded(IrcBuffer* buf);
@@ -43,6 +44,7 @@ private:
     QMap<IrcBuffer*, BufferWrapper*> wrappers;
     bb::system::SystemToast toast;
     void loadSessions();
+    bool isEmpty() { return !hasChildren(QVariantList()); }
 };
 
 //Q_DECLARE_METATYPE( IrcConnection* )
