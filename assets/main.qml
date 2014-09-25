@@ -85,6 +85,8 @@ NavigationPane {
             }
             ListView {
                 property alias cmd: root.cmd
+                property alias cnd: changeNameDialog
+                property alias curnet: root.currentNetwork
 
                 id: channelList
                 dataModel: ChannelModel { id: chanmod }
@@ -108,7 +110,7 @@ NavigationPane {
                                         spaceQuota: 1
                                     }
                                     Label {
-                                        text: ListItemData.host + ":" + ListItemData.userName
+                                        text: ListItemData.host + ":" + ListItemData.nickName
                                     }
                                 }
                                 ImageView {
@@ -124,8 +126,16 @@ NavigationPane {
                             contextActions: [
                                 ActionSet {
                                     title: ListItemData.host
-                                    subtitle: ListItemData.userName
+                                    subtitle: ListItemData.nickName
                                     actions:[
+                                        ActionItem {
+                                            title: "Change Nick"
+                                            imageSource: "asset:///icons/ic_edit_profile.png"
+                                            onTriggered: {
+                                                itemRoot.ListItem.view.curnet = ListItemData
+                                                itemRoot.ListItem.view.cnd.show();
+                                            }
+                                        },
                                         ActionItem {
                                             title: "Reconnect"
                                             imageSource: "asset:///icons/ic_rotate.png"
@@ -212,6 +222,18 @@ NavigationPane {
         ComponentDefinition {
             id: channel
             source: "channel.qml"
+        },
+        SystemPrompt {
+            id: changeNameDialog
+            title: "Change nickname"
+            body: "Enter your desired nickname"
+            inputField.defaultText: root.currentNetwork.nickName
+            inputField.emptyText: "nickname"
+            onFinished: {
+                if(value == SystemUiResult.ConfirmButtonSelection){
+                    root.currentNetwork.nickName = changeNameDialog.inputFieldTextEntry()
+                }
+            }
         },
         SystemPrompt {
             id: joinDialog

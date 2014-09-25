@@ -134,19 +134,6 @@ Page {
         ComponentDefinition {
             id: users
             source: "users.qml"
-        },
-        SystemPrompt {
-            id: changeNameDialog
-            title: "Change nickname"
-            body: "Enter your desired nickname"
-            inputField.defaultText: root.currentNetwork.nickName
-            inputField.emptyText: "nickname"
-            onFinished: {
-                if(value == SystemUiResult.ConfirmButtonSelection){
-                    root.currentNetwork.nickName = changeNameDialog.inputFieldTextEntry()
-                }
-            }
         }
-    
     ]
 }
