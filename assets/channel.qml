@@ -19,7 +19,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     text: "#channel"
                     textStyle {
-                        color: Color.White
+                        color: padding.titleColor
                         base: SystemDefaults.TextStyles.TitleText
                     }
                 }
@@ -110,10 +110,12 @@ Page {
             input {
                 submitKey: SubmitKey.Send
                 onSubmitted: {
-                    var command = cmd.createMessage(currentChannel.buffer.title, msgbar.text);
-                    currentChannel.buffer.sendCommand(command);
-                    currentChannel.addMessage(command);
-                    msgbar.text = "";
+                    if (msgbar.text) {
+                        var command = cmd.createMessage(currentChannel.buffer.title, msgbar.text);
+                        currentChannel.buffer.sendCommand(command);
+                        currentChannel.addMessage(command);
+                        msgbar.text = "";
+                    }
                 }
             }
         }
