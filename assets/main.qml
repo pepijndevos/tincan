@@ -6,19 +6,20 @@ NavigationPane {
     id: root
     property IrcCommand cmd: IrcCommand {}
     property PasswordManager pwmgr: PasswordManager {}
-    property BufferWrapper currentChannel: BufferWrapper { }
-    property BufferWrapper previousChannel: undefined
-    property IrcConnection currentNetwork: undefined
+    property BufferWrapper currentChannel: null
+    property BufferWrapper previousChannel: null
+    property IrcConnection currentNetwork: null
     property variant lastSelectedItem
     onPopTransitionEnded: {
         if(page.uid == "channelpage") {
             console.log("AAAAAAAAA");
             currentChannel.active=false;
         }
-        if(previousChannel != undefined){
+        if(previousChannel != null){
             currentChannel.active=false;
             currentChannel = previousChannel;
             currentChannel.active=true;
+            previousChannel = null;
         }
     }
     Menu.definition: MenuDefinition {
