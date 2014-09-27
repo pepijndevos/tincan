@@ -2,7 +2,7 @@
 
 PasswordManager::PasswordManager(IrcConnection* parent, QString pwd) {
     password = pwd;
-    connect(parent, SIGNAL(password(QString*)), this, SLOT(setPassword(QString*)));
+    connect(parent, SIGNAL(passwordChanged(QString)), this, SLOT(setPassword(QString)));
 }
 
 void PasswordManager::addSession(IrcConnection* session, QString pwd) {
@@ -13,3 +13,9 @@ void PasswordManager::addSession(IrcConnection* session, QString pwd) {
 void PasswordManager::setPassword(QString* pwd) {
     pwd->swap(password);
 }
+
+
+void PasswordManager::setPassword(QString pwd) {
+    pwd.swap(password);
+}
+

@@ -77,7 +77,6 @@ Page {
                             minWidth: 200
                             maxWidth: 200
                             rightMargin: 0
-                            rightPadding: 0
                             textStyle {
                                 fontWeight: FontWeight.Bold
                                 color: (ListItemData.msgtype != "private") ? Color.Gray : Color.Black
@@ -108,6 +107,8 @@ Page {
             bottomPadding: 10
             leftPadding: 10
             rightPadding: 10
+            background: Color.create("#ff323232")
+            topPadding: 10.0
             TextField {
                 id: msgbar
                 inputMode: TextFieldInputMode.Chat

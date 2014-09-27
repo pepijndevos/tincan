@@ -21,22 +21,16 @@ NavigationPane {
             currentChannel.active=true;
             previousChannel = null;
         }
+        Application.menuEnabled = true;
     }
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {
-            title: "Help & Feedback"
+            title: "Info & Feedback"
             onTriggered: {
-                googlegroup.trigger("bb.action.OPEN");
+                var newPage = aboutPage.createObject();
+                root.push(newPage);
+                Application.menuEnabled = false;
             }
-            attachedObjects: [
-                Invocation {
-                    id: googlegroup
-                    query {
-                        mimeType: "text/html"
-                        uri: "https://groups.google.com/forum/m/#!forum/tincan-irc"
-                    }
-                }
-            ]
         }
         //settingsAction: SettingsActionItem {}
         actions: [
@@ -227,7 +221,7 @@ NavigationPane {
             id: changeNameDialog
             title: "Change nickname"
             body: "Enter your desired nickname"
-            inputField.defaultText: root.currentNetwork.nickName
+            inputField.defaultText: (root.currentNetwork!=null)? root.currentNetwork.nickName : "";
             inputField.emptyText: "nickname"
             onFinished: {
                 if(value == SystemUiResult.ConfirmButtonSelection){
@@ -344,6 +338,10 @@ NavigationPane {
         },
         Padding {
             id: padding
+        },
+        ComponentDefinition {
+            id: aboutPage;
+            source: "about.qml";
         }
     ] // end of attachedObjects list
 }

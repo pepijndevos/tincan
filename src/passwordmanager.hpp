@@ -9,7 +9,7 @@
 class PasswordManager : public QObject
 {
     Q_OBJECT
-        
+
 public:
     PasswordManager(QObject* parent=0) : QObject(parent)  {}
     PasswordManager(IrcConnection* parent, QString password);
@@ -17,6 +17,8 @@ public:
 
 public slots:
     void setPassword(QString* password);
+    void setPassword(QString password);
+
 
 private:
     QString password;
