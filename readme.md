@@ -13,10 +13,12 @@
 
 ### Device
 
-Untested...
-
     source bbndk-env.sh
     qmake CONFIG+=device -o arm/Makefile
     cd arm
     make
     blackberry-nativepackager -package TinCan.bar ../bar-descriptor.xml -devMode -configuration Device -installApp -launchApp -device 169.254.0.1 -password ***REMOVED*** -debugToken ../debugtoken.bar
+
+### Publish
+
+    blackberry-signer -bbidtoken bbidtoken.csk -storepass ***REMOVED*** TinCan.bar
