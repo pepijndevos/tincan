@@ -149,8 +149,25 @@ NavigationPane {
                                         DeleteActionItem {
                                             title: "Delete Network"
                                             onTriggered: {
-                                                itemRoot.ListItem.view.dataModel.removeSession(ListItemData);
+                                                netdeltoast.body = "Network " + ListItemData.host + " will be deleted!"
+                                                var dm = itemRoot.ListItem.view.dataModel
+                                                var lmd = ListItemData
+                                                netdeltoast.finished.connect(function (state) {
+                                                    if (state == 1) { //undo
+                                                        // actual undo
+                                                    } else {
+                                                        dm.removeSession(lmd);
+                                                    }
+                                                })
+                                                netdeltoast.show()
                                             }
+                                            attachedObjects: [
+                                                SystemToast {
+                                                    id: netdeltoast
+                                                    button.label: "Undo"
+                                                    button.enabled: true
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
