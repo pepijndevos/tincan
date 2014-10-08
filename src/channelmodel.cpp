@@ -44,7 +44,7 @@ void ChannelModel::removeSession(IrcConnection* s) {
     }
 }
 
-void ChannelModel::saveSession(IrcConnection* session, QString pwd) {
+void ChannelModel::saveSession(IrcConnection* session) {
     QSettings settings;
 
     qDebug() << settings.fileName();
@@ -54,7 +54,7 @@ void ChannelModel::saveSession(IrcConnection* session, QString pwd) {
     settings.setValue("port", session->port());
     settings.setValue("secure", session->isSecure());
     settings.setValue("username", session->userName());
-    settings.setValue("password", pwd);
+    settings.setValue("password", session->password());
     settings.endGroup();
 }
 
@@ -71,8 +71,7 @@ void ChannelModel::loadSessions() {
         s->setUserName(settings.value("username").toString());
         s->setNickName(settings.value("username").toString());
         s->setRealName("TinCan User");
-        QString pwd = settings.value("password").toString();
-        new PasswordManager(s, pwd);
+        s->setPassword(settings.value("password").toString());
         settings.endGroup();
 
         s->open();

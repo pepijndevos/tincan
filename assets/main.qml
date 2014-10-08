@@ -5,7 +5,6 @@ import Communi 1.0
 NavigationPane {
     id: root
     property IrcCommand cmd: IrcCommand {}
-    property PasswordManager pwmgr: PasswordManager {}
     property BufferWrapper currentChannel: null
     property BufferWrapper previousChannel: null
     property IrcConnection currentNetwork: null
@@ -320,9 +319,9 @@ NavigationPane {
                             session.userName = nick.text || "tincan";
                             session.nickName = nick.text || "tincan";
                             session.realName = "TinCan User";
+                            session.password = password.text;
                             session.open();
-                            pwmgr.addSession(session, password.text);
-                            chanmod.saveSession(session, password.text);
+                            chanmod.saveSession(session);
                             
                             networkDialog.close()
                         }

@@ -8,7 +8,6 @@
 #include <IrcBufferModel>
 #include <IrcBuffer>
 #include "bufferwrapper.hpp"
-#include "passwordmanager.hpp"
 
 using namespace bb::cascades;
 
@@ -26,7 +25,7 @@ public:
     Q_INVOKABLE BufferWrapper* getWrapper(IrcBuffer*);
     Q_INVOKABLE IrcConnection* addSession();
     Q_INVOKABLE void removeSession(IrcConnection*);
-    Q_INVOKABLE void saveSession(IrcConnection*, QString password);
+    Q_INVOKABLE void saveSession(IrcConnection*);
     Q_PROPERTY(bool empty READ isEmpty NOTIFY itemAdded)
 
 public slots:
