@@ -79,7 +79,7 @@ Page {
                             rightMargin: 0
                             textStyle {
                                 fontWeight: FontWeight.Bold
-                                color: (ListItemData.msgtype != "private") ? Color.Gray : Color.Black
+                                color: (ListItemData.msgtype != "private") ? Color.Gray : SystemDefaults.TextStyles.bodyText.color
                                 // fancy color?
                             }
                         }
@@ -96,7 +96,7 @@ Page {
                             leftMargin: 0
                             textFormat: TextFormat.Plain
                             textStyle {
-                                color: (ListItemData.msgtype != "private") ? Color.Gray : Color.Black
+                                color: (ListItemData.msgtype != "private") ? Color.Gray : SystemDefaults.TextStyles.bodyText.color
                             }
                         }
                     }
