@@ -93,7 +93,9 @@ void ChannelModel::loadModel() {
 }
 
 void ChannelModel::bufferAdded(IrcBuffer* buf) {
-    wrappers.insert(buf, new BufferWrapper(buf));
+    BufferWrapper* bw = new BufferWrapper(buf);
+    connect(buf->connection(), SIGNAL(enabledChanged(bool)), bw, SIGNAL(enabledChanged()));    
+    wrappers.insert(buf, bw);
     saveModel(buf->model());
 
     QVariantList indexPath = QVariantList();

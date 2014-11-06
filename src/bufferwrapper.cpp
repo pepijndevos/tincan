@@ -115,3 +115,7 @@ void BufferWrapper::showChannel(QObject* chan){
 
     ((ListView*)chan)->setDataModel(msgs);
 }
+
+bool BufferWrapper::isEnabled() {
+    return ((IrcBuffer*)parent())->connection()->isEnabled();
+}

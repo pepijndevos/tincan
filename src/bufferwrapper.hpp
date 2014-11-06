@@ -23,6 +23,7 @@ class BufferWrapper : public QObject
     Q_PROPERTY(ArrayDataModel* messages READ getMessages)
     Q_PROPERTY(int unread READ getUnread NOTIFY unreadChanged)
     Q_PROPERTY(bool active READ getActive WRITE setActive)
+    Q_PROPERTY(bool enabled READ isEnabled NOTIFY enabledChanged)
 
 public:
     BufferWrapper(IrcBuffer* parent=0);
@@ -42,12 +43,14 @@ public slots:
 
 signals:
     void unreadChanged();
+    void enabledChanged();
 
 private:
     IrcBuffer* buf;
     ArrayDataModel* msgs;
     int unread;
     bool active;
+    bool isEnabled();
 
 };
 

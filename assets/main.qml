@@ -92,6 +92,7 @@ NavigationPane {
                         
                         Container {
                             id: itemRoot
+                            visible: ListItemData.enabled
                             Container {
                                 layout: StackLayout {
                                     orientation: LayoutOrientation.LeftToRight
@@ -151,10 +152,12 @@ NavigationPane {
                                             onTriggered: {
                                                 netdeltoast.body = "Network " + ListItemData.host + " will be deleted!"
                                                 var dm = itemRoot.ListItem.view.dataModel
+                                                ListItemData.enabled = false;
                                                 var lmd = ListItemData
                                                 netdeltoast.finished.connect(function (state) {
                                                     if (state == 1) { //undo
-                                                        // actual undo
+                                                        ListItemData.enabled = true;
+                                                        itemRoot.ListItem.view.scroll(0, 0);
                                                     } else {
                                                         dm.removeSession(lmd);
                                                     }
@@ -181,6 +184,7 @@ NavigationPane {
                             title: ListItemData.title
                             status: ListItemData.unread ? ListItemData.unread : ""
                             id: itemRoot2
+                            visible: ListItemData.enabled
                             contextActions: [
                                 ActionSet {
                                     title: ListItemData.title
