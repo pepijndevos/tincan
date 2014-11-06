@@ -5,10 +5,11 @@ ChannelModel::ChannelModel(QObject *parent) : DataModel(parent) {
     loadSessions();
 }
 
-IrcConnection* ChannelModel::addSession() {
+IrcBufferModel* ChannelModel::addSession() {
     IrcConnection* session = new IrcConnection();
     connect(session, SIGNAL(numericMessageReceived(IrcNumericMessage*)), this, SLOT(notifyError(IrcNumericMessage*)));
     connect(session, SIGNAL(noticeMessageReceived(IrcNoticeMessage*)), this, SLOT(notifyNotice(IrcNoticeMessage*)));
+    connect(session, SIGNAL(connected()), this, SLOT(loadModel()));
 
     IrcBufferModel* model = new IrcBufferModel(session);
     connect(model, SIGNAL(added(IrcBuffer*)), this, SLOT(bufferAdded(IrcBuffer*)));
@@ -19,7 +20,7 @@ IrcConnection* ChannelModel::addSession() {
     indexPath.append(sessions.indexOf(model));
     emit itemAdded(indexPath);
 
-    return session;
+    return model;
 }
 
 void ChannelModel::removeSession(IrcConnection* s) {
@@ -47,14 +48,8 @@ void ChannelModel::removeSession(IrcConnection* s) {
 void ChannelModel::saveSession(IrcConnection* session) {
     QSettings settings;
 
-    qDebug() << settings.fileName();
-
     settings.beginGroup(session->host() + ":" + session->userName().replace("/", ":"));
-    settings.setValue("host", session->host());
-    settings.setValue("port", session->port());
-    settings.setValue("secure", session->isSecure());
-    settings.setValue("username", session->userName());
-    settings.setValue("password", session->password());
+    settings.setValue("session", session->saveState());
     settings.endGroup();
 }
 
@@ -62,24 +57,44 @@ void ChannelModel::loadSessions() {
     QSettings settings;
     foreach(QString network, settings.childGroups()) {
         qDebug() << network;
-        IrcConnection* s = addSession();
+        IrcBufferModel* s = addSession();
+        IrcConnection* c = s->connection();
 
         settings.beginGroup(network);
-        s->setHost(settings.value("host").toString());
-        s->setPort(settings.value("port").toInt());
-        s->setSecure(settings.value("secure").toBool());
-        s->setUserName(settings.value("username").toString());
-        s->setNickName(settings.value("username").toString());
-        s->setRealName("TinCan User");
-        s->setPassword(settings.value("password").toString());
+        c->restoreState(settings.value("session").toByteArray());
+        c->open();
         settings.endGroup();
 
-        s->open();
+    }
+}
+
+void ChannelModel::saveModel(IrcBufferModel* bm) {
+    IrcConnection* session = bm->connection();
+    QSettings settings;
+
+    settings.beginGroup(session->host() + ":" + session->userName().replace("/", ":"));
+    settings.setValue("buffers", bm->saveState());
+    settings.endGroup();
+}
+
+void ChannelModel::loadModel() {
+    QSettings settings;
+
+    const int listSize = sessions.size();
+    for (int i = 0; i < listSize; ++i) {
+        IrcBufferModel* model = sessions.at(i);
+        IrcConnection* session = model->connection();
+        if(session->isConnected()) {
+            settings.beginGroup(session->host() + ":" + session->userName().replace("/", ":"));
+            model->restoreState(settings.value("buffers").toByteArray());
+            settings.endGroup();
+        }
     }
 }
 
 void ChannelModel::bufferAdded(IrcBuffer* buf) {
     wrappers.insert(buf, new BufferWrapper(buf));
+    saveModel(buf->model());
 
     QVariantList indexPath = QVariantList();
     int sessionIndex = sessions.indexOf(buf->model());
@@ -91,6 +106,7 @@ void ChannelModel::bufferAdded(IrcBuffer* buf) {
 
 void ChannelModel::bufferRemoved(IrcBuffer* buf) {
     wrappers.remove(buf);
+    saveModel(buf->model());
 
     QVariantList indexPath = QVariantList();
     int sessionIndex = sessions.indexOf(buf->model());

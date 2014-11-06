@@ -329,7 +329,7 @@ NavigationPane {
                             var host = server.text || server.hintText;
                             var name = nick.text || "tincan";
                             
-                            var session = chanmod.addSession();
+                            var session = chanmod.addSession().connection;
                             session.host = host;
                             session.port = parseInt(port.text || port.hintText);
                             session.secure = ssl.checked;

@@ -23,9 +23,10 @@ public:
     QString itemType(const QVariantList &indexPath);
     QVariant data(const QVariantList &indexPath);
     Q_INVOKABLE BufferWrapper* getWrapper(IrcBuffer*);
-    Q_INVOKABLE IrcConnection* addSession();
+    Q_INVOKABLE IrcBufferModel* addSession();
     Q_INVOKABLE void removeSession(IrcConnection*);
     Q_INVOKABLE void saveSession(IrcConnection*);
+    Q_INVOKABLE void loadSessions();
     Q_PROPERTY(bool empty READ isEmpty NOTIFY itemAdded)
 
 public slots:
@@ -33,6 +34,7 @@ public slots:
     void bufferRemoved(IrcBuffer* buf);
     void notifyError(IrcNumericMessage* message);
     void notifyNotice(IrcNoticeMessage* message);
+    void loadModel();
 signals:
     void itemAdded (QVariantList indexPath);
     void itemRemoved (QVariantList indexPath);
@@ -42,8 +44,8 @@ private:
     QList<IrcBufferModel*> sessions;
     QMap<IrcBuffer*, BufferWrapper*> wrappers;
     bb::system::SystemToast toast;
-    void loadSessions();
     bool isEmpty() { return !hasChildren(QVariantList()); }
+    void saveModel(IrcBufferModel*);
 };
 
 //Q_DECLARE_METATYPE( IrcConnection* )
