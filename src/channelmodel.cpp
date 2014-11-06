@@ -32,7 +32,7 @@ void ChannelModel::removeSession(IrcConnection* s) {
             sessions.removeAt(i);
 
             QSettings settings;
-            settings.remove(s->host() + ":" + s->userName());
+            settings.remove(s->host() + ":" + s->userName().replace("/", ":"));
 
             QVariantList indexPath = QVariantList();
             indexPath.append(i);
@@ -49,7 +49,7 @@ void ChannelModel::saveSession(IrcConnection* session) {
 
     qDebug() << settings.fileName();
 
-    settings.beginGroup(session->host() + ":" + session->userName());
+    settings.beginGroup(session->host() + ":" + session->userName().replace("/", ":"));
     settings.setValue("host", session->host());
     settings.setValue("port", session->port());
     settings.setValue("secure", session->isSecure());
